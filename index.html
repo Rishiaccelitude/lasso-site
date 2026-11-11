@@ -1,0 +1,569 @@
+<title>Lasso End to End</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<style>
+  /* Flowroom is deliberately a light world (docs/decisions.md) — single-theme, painted explicitly. */
+  :root {
+    color-scheme: light;
+    --paper: #F7F6F2; --card: #FFFFFF; --ink: #232819; --body: #3E4435; --muted: #687060; --faint: #9aa0a6;
+    --hairline: #E3E1D8; --pine: #115E45; --pine-wash: rgba(17,94,69,.08);
+    --sienna: #A64B1A; --sienna-wash: rgba(166,75,26,.06);
+    --gold: #9A7B1F; --gold-wash: rgba(154,123,31,.07);
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    --sans: Inter, -apple-system, system-ui, sans-serif;
+    --serif: Fraunces, Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  .stage { scroll-margin-top: 24px; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--sans); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ---------- gallery narration (meta layer) ---------- */
+  .hero { padding: 72px 0 40px; }
+  .hero .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .hero .knot { width: 30px; height: 30px; border: 2px solid var(--pine); border-radius: 50%; position: relative; }
+  .hero .knot::after { content: ""; position: absolute; inset: 6px; border: 2px solid var(--pine); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+  .hero .wordmark { font: 600 17px var(--sans); letter-spacing: -0.01em; }
+  .hero h1 { font: 500 44px/1.12 var(--serif); letter-spacing: -0.015em; margin: 0 0 14px; max-width: 18ch; text-wrap: balance; }
+  .hero p { color: var(--body); max-width: 58ch; margin: 0 0 6px; font-size: 17px; }
+  .hero .loop { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 18px; font-size: 14px; color: var(--muted); }
+  .hero .loop b { color: var(--pine); font-weight: 600; }
+  .hero .loop span.arrow { color: var(--faint); }
+
+  /* hero demo — show, don't tell */
+  .herodemo { position: relative; margin-top: 18px; max-width: 620px; }
+  .hd-term { position: relative; z-index: 1; }
+  .hd-prompt, .hd-held { opacity: 0; transition: opacity .3s ease-out; }
+  .herodemo[data-step="1"] .hd-prompt,
+  .herodemo[data-step="2"] .hd-prompt, .herodemo[data-step="3"] .hd-prompt,
+  .herodemo[data-step="4"] .hd-prompt, .herodemo[data-step="5"] .hd-prompt { opacity: 1; }
+  .herodemo[data-step="2"] .hd-held, .herodemo[data-step="3"] .hd-held,
+  .herodemo[data-step="4"] .hd-held, .herodemo[data-step="5"] .hd-held { opacity: 1; }
+  .hd-lock { position: relative; z-index: 2; margin: -18px 0 0 34px; background: var(--card); border: 1px solid var(--pine); border-radius: 12px; box-shadow: 0 18px 48px -12px rgba(35,40,25,.3); overflow: hidden; opacity: 0; transform: translateY(10px); transition: opacity .35s ease-out, transform .35s ease-out; }
+  .herodemo[data-step="3"] .hd-lock, .herodemo[data-step="4"] .hd-lock, .herodemo[data-step="5"] .hd-lock { opacity: 1; transform: none; }
+  .hd-lock .lp-head { display: flex; align-items: center; gap: 8px; background: var(--pine); color: #fff; font-size: 12.5px; font-weight: 600; padding: 7px 14px; }
+  .hd-body { padding: 13px 16px 14px; font-size: 13.5px; }
+  .hd-label { color: var(--faint); font-size: 12.5px; margin-bottom: 5px; }
+  .hd-ans { min-height: 21px; }
+  .hd-caret { display: inline-block; width: 1.5px; height: 14px; background: var(--pine); vertical-align: -2px; }
+  .herodemo[data-step="5"] .hd-a1, .herodemo[data-step="5"] .hd-a2 { opacity: 0; }
+  .hd-a1, .hd-a2 { transition: opacity .3s ease-out; }
+  .herodemo[data-step="4"] .hd-a2 { border-bottom: 2px solid var(--gold); padding-bottom: 1px; }
+  .hd-gm { max-height: 0; overflow: hidden; transition: max-height .4s ease-out; }
+  .herodemo[data-step="4"] .hd-gm { max-height: 160px; }
+  .hd-note { font-size: 12.5px; margin-top: 7px; padding-left: 10px; border-left: 2px solid var(--hairline); color: var(--muted); }
+  .hd-note.ok { border-color: var(--pine); color: var(--pine); }
+  .hd-note.vague { border-color: var(--gold); }
+  .hd-note.miss { border-color: var(--hairline); font-style: italic; color: var(--faint); }
+  .hd-note b { color: var(--ink); }
+  .hd-cite { display: block; font: 400 11px var(--mono); color: var(--faint); }
+  .hd-foot { margin-top: 11px; font-size: 12.5px; min-height: 19px; position: relative; }
+  .hd-rewrite, .hd-pass { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .3s ease-out; }
+  .hd-rewrite { color: var(--sienna); }
+  .hd-pass { color: var(--pine); font-weight: 600; }
+  .herodemo[data-step="4"] .hd-rewrite { opacity: 1; }
+  .herodemo[data-step="5"] .hd-pass { opacity: 1; }
+
+
+  /* takeover moment */
+  .desk { position: relative; padding: 26px 20px 30px; background: var(--paper); }
+  .behind { filter: blur(1.5px) saturate(.7); opacity: .55; pointer-events: none; }
+  .termcard { background: #2B2F26; color: #C9CEC2; border-radius: 10px; padding: 14px 16px; font: 400 12.5px/1.7 var(--mono); max-width: 540px; }
+  .termcard .p { color: #8FA08A; }
+  .lockpop { position: relative; margin: -34px auto 0; max-width: 560px; background: var(--card); border: 1px solid var(--pine); border-radius: 12px; box-shadow: 0 18px 48px -12px rgba(35,40,25,.35); overflow: hidden; }
+  .lockpop .lp-head { display: flex; align-items: center; gap: 8px; background: var(--pine); color: #fff; font-size: 12.5px; font-weight: 600; padding: 8px 14px; }
+  .lockpop .lp-body { padding: 14px 16px; font-size: 13.5px; }
+  .lockpop .lp-body p { margin: 0 0 8px; }
+  .rulechips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .rulechip { font-size: 12.5px; border: 1px solid var(--hairline); background: var(--card); border-radius: 10px; padding: 5px 12px; color: var(--muted); }
+  .rulechip b { color: var(--ink); font-weight: 600; }
+  .rulechip.warn { border-color: var(--sienna); } .rulechip.warn b { color: var(--sienna); }
+
+  /* closed-book strip */
+  .closedbook { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; font-size: 12.5px; }
+  .closedbook .cb-lbl { font-weight: 600; color: var(--ink); }
+  .withheld { border: 1px dashed var(--hairline); border-radius: 10px; padding: 3px 11px; color: var(--faint); background: var(--paper); }
+  .withheld s { text-decoration-color: var(--faint); text-decoration-thickness: 1px; }
+
+  .stage { margin-top: 72px; }
+  .stage-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .stage-head .n { font: 600 12px var(--mono); color: var(--pine); border: 1px solid var(--pine); border-radius: 10px; padding: 1px 9px; }
+  .stage-head h2 { font: 500 25px/1.2 var(--serif); margin: 0; letter-spacing: -0.01em; }
+  .stage > .note { color: var(--body); max-width: 62ch; margin: 0 0 20px; font-size: 16px; line-height: 1.65; }
+  .stage > .note b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- window frames (product layer) ---------- */
+  .frame { background: var(--card); border: 1px solid var(--hairline); border-radius: 12px; box-shadow: 0 1px 2px rgba(35,40,25,.05), 0 12px 32px -18px rgba(35,40,25,.18); overflow: hidden; }
+  .titlebar { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-bottom: 1px solid var(--hairline); background: var(--card); }
+  .titlebar .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--hairline); }
+  .titlebar .tname { font-size: 12px; color: var(--faint); margin-left: 6px; }
+  .titlebar .tright { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .titlebar.lock { background: var(--paper); }
+  .titlebar.lock .tname { color: var(--muted); }
+  .est { font: 400 11px var(--mono); color: var(--faint); }
+  .screen { padding: 18px 20px 22px; background: var(--paper); }
+  .screen.white { background: var(--card); }
+
+  .chip { display: inline-block; border: 1px solid var(--hairline); background: var(--card); border-radius: 12px; padding: 2px 12px; font-size: 12px; color: var(--muted); }
+  .chip.risk { border-color: var(--sienna); color: var(--sienna); font-family: var(--mono); }
+  .chip.pine { border-color: var(--pine); color: var(--pine); }
+
+  /* Today */
+  .today-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 4px 2px 14px; }
+  .today-head h3 { font-size: 16px; margin: 0; letter-spacing: -0.01em; }
+  .seg { display: inline-flex; border: 1px solid var(--hairline); background: var(--card); border-radius: 12px; overflow: hidden; margin-left: auto; }
+  .seg span { font-size: 12px; color: var(--muted); padding: 3px 12px; }
+  .seg span.active { background: var(--pine-wash); color: var(--pine); font-weight: 600; }
+  .declare { background: var(--card); border: 1px solid var(--hairline); border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 12px; }
+  .declare .task { font-weight: 600; font-size: 14px; }
+  .declare .sub { font-size: 12px; color: var(--muted); }
+  .declare .count { font: 600 14px var(--mono); color: var(--gold); text-align: right; white-space: nowrap; }
+  .chain { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .step { font-size: 10.5px; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--hairline); color: var(--muted); background: var(--card); }
+  .step.done { border-color: var(--pine); color: var(--pine); }
+  .step.open { border-color: var(--pine); color: var(--pine); background: var(--pine-wash); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .45; } }
+  @media (prefers-reduced-motion: reduce) { .step.open { animation: none; } }
+  .composer { background: var(--card); border: 1px dashed var(--hairline); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--faint); margin-top: 4px; }
+  .composer b { color: var(--ink); font-weight: 500; }
+
+  /* Lock window — write */
+  .rubricdots { display: flex; gap: 5px; }
+  .rubricdots i { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--hairline); background: var(--card); }
+  .scaffold { background: var(--card); border: 1px solid var(--hairline); border-radius: 10px; padding: 18px 20px; }
+  .scaffold .prompt { color: var(--faint); font-size: 13px; margin: 14px 0 4px; }
+  .scaffold .prompt:first-child { margin-top: 0; }
+  .scaffold .typed { font-size: 14px; }
+  .scaffold .caret { display: inline-block; width: 1.5px; height: 15px; background: var(--pine); vertical-align: -2px; }
+  .lockfoot { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .btn { border: 1px solid var(--hairline); background: var(--card); border-radius: 10px; padding: 6px 16px; font: 500 13px var(--sans); color: var(--ink); }
+  .btn.primary { background: var(--pine); border-color: var(--pine); color: #fff; }
+  .btn.quiet { color: var(--muted); font-weight: 400; }
+  .btn.quiet.picked { border-color: var(--pine); color: var(--pine); background: var(--pine-wash); }
+  .abandon { margin-left: auto; font-size: 12px; color: var(--sienna); }
+  .abandon small { color: var(--faint); }
+
+  /* Gap map */
+  .coverage { display: flex; align-items: center; gap: 7px; margin-bottom: 14px; }
+  .coverage .lbl { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+  .coverage i { width: 9px; height: 9px; border-radius: 50%; }
+  .coverage i.full { background: var(--pine); } .coverage i.half { border: 2px solid var(--gold); background: var(--card); } .coverage i.empty { border: 2px solid var(--hairline); background: var(--card); }
+  .gm { background: var(--card); border: 1px solid var(--hairline); border-radius: 10px; padding: 4px 0; }
+  .gm .line { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 7px 18px 7px 10px; font-size: 14px; }
+  .gm .mark { text-align: center; font-size: 12px; line-height: 1.6; }
+  .gm .line.solid .mark { color: var(--pine); }
+  .gm .line.vague { background: var(--gold-wash); } .gm .line.vague .mark { color: var(--gold); }
+  .gm .line.vague .t { border-bottom: 2px solid var(--gold); padding-bottom: 1px; }
+  .gm .line.wrong { background: var(--sienna-wash); } .gm .line.wrong .mark { color: var(--sienna); }
+  .gm .line.wrong .t { text-decoration: line-through; text-decoration-color: var(--sienna); text-decoration-thickness: 1.5px; }
+  .gm .line.missing { border: 1.5px dashed var(--hairline); border-left: 0; border-right: 0; }
+  .gm .line.missing .t { color: var(--faint); font-style: italic; }
+  .push { margin: 2px 18px 10px 36px; font-size: 12.5px; border-left: 2px solid var(--hairline); padding: 4px 12px; color: var(--muted); }
+  .push.gold { border-color: var(--gold); } .push.rust { border-color: var(--sienna); }
+  .push b { color: var(--ink); font-weight: 600; }
+  .push .cite { font: 400 11px var(--mono); color: var(--faint); display: block; margin-top: 2px; }
+  .gm-foot { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+
+  /* Re-study */
+  .study { display: grid; grid-template-columns: 1.5fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .study { grid-template-columns: 1fr; } }
+  .panel { background: var(--card); border: 1px solid var(--hairline); border-radius: 10px; padding: 14px 16px; font-size: 13px; }
+  .panel h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+  .panel.tutor { border-color: var(--gold); background: var(--gold-wash); }
+  .panel .code { font: 400 12px/1.6 var(--mono); background: var(--paper); border: 1px solid var(--hairline); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
+  .msg { border-radius: 8px; padding: 7px 10px; margin-top: 8px; background: var(--card); border: 1px solid var(--hairline); font-size: 12.5px; }
+  .msg.you { border-color: var(--gold); }
+  .timer { font: 600 13px var(--mono); color: var(--gold); }
+
+  /* Debrief */
+  .debrief { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--card); border: 1px solid var(--hairline); border-radius: 10px; overflow: hidden; }
+  @media (max-width: 640px) { .debrief { grid-template-columns: 1fr; } }
+  .debrief .col { padding: 14px 18px; font-size: 13px; }
+  .debrief .col + .col { border-left: 1px solid var(--hairline); }
+  @media (max-width: 640px) { .debrief .col + .col { border-left: 0; border-top: 1px solid var(--hairline); } }
+  .debrief h4 { margin: 0 0 10px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+  .debrief .col.expert h4 { color: var(--pine); }
+  .debrief li { margin-bottom: 8px; }
+  .debrief li .why { display: block; color: var(--muted); font-size: 12px; }
+  .passbar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--hairline); background: var(--pine-wash); font-size: 13px; color: var(--pine); font-weight: 600; }
+
+  /* Review & debug compact frames */
+  .findings { font-size: 13px; }
+  .findings .f { display: grid; grid-template-columns: 20px 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--hairline); }
+  .findings .f:last-child { border-bottom: 0; }
+  .findings .sev { color: var(--sienna); font: 600 11px var(--mono); }
+  .findings .posted { font: 400 11px var(--mono); color: var(--pine); }
+  .kv { font: 400 12px var(--mono); color: var(--muted); }
+
+  /* Per-gate rigidity bars */
+  .gatebar { display: grid; grid-template-columns: 70px 1fr; gap: 14px; align-items: start; padding: 13px 2px; border-bottom: 1px solid var(--hairline); }
+  .gatebar:last-child { border-bottom: 0; }
+  .gatebar .gname { font-weight: 600; font-size: 13px; padding-top: 2px; }
+  .bar { position: relative; height: 6px; background: var(--hairline); border-radius: 3px; margin: 9px 0 8px; }
+  .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--pine); border-radius: 3px; }
+  .bar .notch { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--card); }
+  .bar .handle { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 16px; height: 16px; border-radius: 50%; background: var(--card); border: 2.5px solid var(--pine); box-shadow: 0 1px 3px rgba(35,40,25,.2); }
+  .bar .floorstop { position: absolute; top: -5px; width: 3px; height: 16px; border-radius: 2px; background: var(--sienna); }
+  .bar.queued .fill { background: var(--gold); } .bar.queued .handle { border-color: var(--gold); }
+  .barlabels { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); }
+  .barlabels span.on { color: var(--pine); font-weight: 600; }
+  .barmeaning { font-size: 12px; color: var(--muted); margin-top: 5px; }
+  .barmeaning .custom { color: var(--pine); font-weight: 600; }
+  .barmeaning .queue { color: var(--gold); }
+  .barmeaning .floor { color: var(--sienna); }
+
+  /* real-app screenshots */
+  .shotgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 680px) { .shotgrid { grid-template-columns: 1fr; } }
+  .shot { background: var(--card); border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(35,40,25,.05), 0 12px 32px -18px rgba(35,40,25,.18); }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot figcaption { padding: 10px 14px; font-size: 13.5px; color: var(--body); border-top: 1px solid var(--hairline); }
+  .shot figcaption b { color: var(--ink); font-weight: 600; }
+  .shot figure { margin: 0; }
+
+  /* flow rail between stages */
+  .rail { display: flex; justify-content: center; margin: 26px 0 -46px; }
+  .rail i { width: 1.5px; height: 46px; background: var(--hairline); }
+
+  .foot { margin-top: 80px; border-top: 1px solid var(--hairline); padding-top: 20px; color: var(--faint); font-size: 12.5px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .foot b { color: var(--muted); font-weight: 600; }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="brand"><div class="knot" aria-hidden="true"></div><span class="wordmark">Lasso</span></div>
+    <h1>You can’t ship what you can’t explain.</h1>
+    <p>Lasso harnesses your understanding of what the AI builds. Watch:</p>
+
+    <div class="herodemo" id="demo" data-step="0" aria-label="Demo: a prompt is held until you explain your understanding">
+      <div class="termcard hd-term"><span class="p">~/app $</span> claude<br><span class="hd-prompt">&gt; wire up the payment webhook</span><br><span class="p hd-held">⏸ Lasso: gate open — prompt held until you pass</span></div>
+      <div class="hd-lock">
+        <div class="lp-head">🪢 Lasso — Task gate <span style="margin-left:auto;font-weight:400;opacity:.85">closed book · ~2 min</span></div>
+        <div class="hd-body">
+          <div class="hd-label">The systems involved, and how data moves between them</div>
+          <div class="hd-ans"><span class="hd-a1">Stripe calls our webhook when a payment settles</span><span class="hd-a2"> and it updates the order.</span><span class="hd-caret"></span></div>
+          <div class="hd-gm">
+            <div class="hd-note ok">✓ entry point named</div>
+            <div class="hd-note vague">~ “it updates the order” — which <i>it</i>? The handler writes the DB directly, or through the queue?<span class="hd-cite">webhooks.ts:41</span></div>
+            <div class="hd-note miss">∅ What happens when Stripe sends the same event twice — not written</div>
+          </div>
+          <div class="hd-foot">
+            <span class="hd-rewrite">↺ Rewrite from scratch — your draft clears</span>
+            <span class="hd-pass">✓ Passed — prompt released, build on</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:20px">Gates you can’t get around, at the moments work moves. Every pass sharpens a skill you keep.</p>
+  </header>
+
+  <div style="margin-top:72px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)">One task, start to finish</div>
+  <!-- 1 · TODAY -->
+  <section class="stage" id="s1" style="margin-top:14px">
+    <div class="stage-head"><span class="n">1</span><h2>Your whole day, one screen</h2></div>
+    <p class="note">One screen: your tasks, their gates, and what’s waiting on you. One line adds a task.</p>
+    <div class="frame">
+      <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso — Today</span></div>
+      <div class="screen">
+        <div class="today-head">
+          <h3>Today</h3>
+          <span class="seg"><span>Light</span><span class="active">Standard</span><span>Strict</span></span>
+          <span class="chip">trend ▲ 74%</span>
+        </div>
+        <div class="declare">
+          <div>
+            <div class="task">Dedupe webhook deliveries so replays can’t double-fire gates</div>
+            <div class="sub">declared · repo lasso</div>
+            <div class="chain">
+              <span class="step done">map ✓</span><span class="step open">task ●</span><span class="step">build</span><span class="step">review</span><span class="step">merged</span>
+            </div>
+          </div>
+          <div class="count">5:42:10<div class="sub" style="font-family:var(--sans);font-weight:400">by 6:00 pm</div></div>
+        </div>
+        <div class="composer">Add a task… <b>fix flaky presence test by friday</b></div>
+      </div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 2 · TAKEOVER -->
+  <section class="stage" id="s2">
+    <div class="stage-head"><span class="n">2</span><h2>The gate takes your screen</h2></div>
+    <p class="note">Send the first prompt of a new task and the lock window takes the screen. It shows up only when work moves — never in between.</p>
+    <div class="frame">
+      <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Your screen — 2:03 pm</span></div>
+      <div class="desk">
+        <div class="behind">
+          <div class="termcard"><span class="p">~/lasso $</span> claude<br>&gt; implement webhook dedupe by delivery id<br><span class="p">⏸ Lasso: context gate pending — prompt held</span></div>
+        </div>
+        <div class="lockpop" role="dialog" aria-label="Lasso lock window">
+          <div class="lp-head">🪢 Lasso — Task gate · lasso <span style="margin-left:auto;font-weight:400;opacity:.85">~4 min</span></div>
+          <div class="lp-body">
+            <p><b>Before this prompt goes out:</b> explain what you’re building and the systems involved — from memory.</p>
+            <p style="color:var(--muted)">This window is fullscreen and can’t be closed. Pass the gate (or take the abandon door) to get your screen back.</p>
+          </div>
+        </div>
+        <div class="rulechips">
+          <span class="rulechip"><b>Can’t close it</b> — no ✕, always on top</span><!-- takeover-anchor -->
+          <span class="rulechip"><b>Can’t switch away</b> — the window pulls focus right back</span>
+          <span class="rulechip warn"><b>3+ seconds away = fee</b> — and mid-answer, your attempt clears</span>
+          <span class="rulechip"><b>Always an exit</b> — abandon door, with its cost shown</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 3 · WRITE -->
+  <section class="stage" id="s3">
+    <div class="stage-head"><span class="n">3</span><h2>Closed book. From memory.</h2></div>
+    <p class="note"><b>Nothing you were given is visible</b> — no brief, no code, no notes, paste off. Explaining it cold is the proof. Leave mid-answer and the attempt clears.</p>
+    <div class="frame">
+      <div class="titlebar lock">
+        <span class="tname">Task gate · lasso</span>
+        <div class="tright">
+          <span class="rubricdots" aria-label="rubric progress"><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="est">~4 min</span>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="closedbook">
+          <span class="cb-lbl">Closed book — hidden until you pass:</span>
+          <span class="withheld"><s>your task brief</s></span>
+          <span class="withheld"><s>the code</s></span>
+          <span class="withheld"><s>Claude’s output</s></span>
+          <span class="withheld"><s>your notes</s></span>
+          <span class="withheld">paste off</span>
+        </div>
+        <div class="scaffold">
+          <div class="prompt">Why this task, why now — what it unlocks, what you’re deliberately not doing</div>
+          <div class="typed">Replayed webhook deliveries can flip a check twice and double-charge a stake — it blocks trusting the ledger. Not touching polling fallback; it already dedupes.</div>
+          <div class="prompt">The problem, in your own words</div>
+          <div class="typed">GitHub redelivers webhooks on timeout. We treat each delivery as new, so one PR event can create two gates.</div>
+          <div class="prompt">The systems involved, and how data moves between them</div>
+          <div class="typed">GitHub → webhook route → gate engine → SQLite ledger. The lock window only renders what the server decides.<span class="caret"></span></div>
+          <div class="prompt">Your approach, and why over the alternatives</div>
+          <div class="prompt">Done means…</div>
+        </div>
+        <div class="lockfoot">
+          <button class="btn quiet picked">This passes</button>
+          <button class="btn quiet">Not sure</button>
+          <button class="btn primary">Submit</button>
+          <span class="abandon">Abandon — $5 <small>· work stays frozen, gate resumes</small></span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 4 · GAP MAP -->
+  <section class="stage" id="s4">
+    <div class="stage-head"><span class="n">4</span><h2>See exactly what you’re missing</h2></div>
+    <p class="note">Never a score — your own words, marked up. At most four gaps, one pushback question each. Then you rewrite from scratch. (Need the material again? Re-study is timed, with a tutor that never answers the gate.)</p>
+    <div class="frame">
+      <div class="titlebar lock"><span class="tname">Task gate · attempt 1 — close, not yet</span><div class="tright"><span class="est">rewrite from scratch to continue</span></div></div>
+      <div class="screen">
+        <div class="coverage"><span class="lbl">Coverage</span><i class="full"></i><i class="full"></i><i class="half"></i><i class="empty"></i><i class="empty"></i></div>
+        <div class="gm">
+          <div class="line solid"><span class="mark">✓</span><span class="t">Replayed webhook deliveries can flip a check twice and double-charge a stake…</span></div>
+          <div class="line solid"><span class="mark">✓</span><span class="t">GitHub redelivers webhooks on timeout. We treat each delivery as new…</span></div>
+          <div class="line vague"><span class="mark">~</span><span class="t">GitHub → webhook route → gate engine → SQLite ledger.</span></div>
+        </div>
+        <div class="push gold"><b>Where exactly does a delivery become a gate?</b> You’ve named the boxes but not the hand-off that duplicates.<span class="cite">webhooks.ts:41 → engine.decide() — the call replays pass through twice</span></div>
+        <div class="gm" style="margin-top:10px">
+          <div class="line wrong"><span class="mark">✕</span><span class="t">“Polling fallback already dedupes.”</span></div>
+        </div>
+        <div class="push rust"><b>The repo disagrees.</b> The poller inserts by (repo, event) with no delivery id — replays reach it clean. What key would make both paths idempotent?<span class="cite">watchdog.ts:88 — pollOnce() has no delivery-id check</span></div>
+        <div class="gm" style="margin-top:10px">
+          <div class="line missing"><span class="mark">∅</span><span class="t">Your approach, and why over the alternatives — not written</span></div>
+          <div class="line missing"><span class="mark">∅</span><span class="t">Done means… — not written</span></div>
+        </div>
+        <div class="gm-foot">
+          <button class="btn">Re-study · 6 min</button>
+          <button class="btn primary">Rewrite from scratch</button>
+          <span>Your draft clears — patched sentences aren’t understanding.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 6 · PASS + DEBRIEF -->
+  <section class="stage" id="s6">
+    <div class="stage-head"><span class="n">5</span><h2>Pass, learn, build on</h2></div>
+    <p class="note">Your answer beside what an expert covers. Then the prompt releases and you build freely.</p>
+    <div class="frame">
+      <div class="titlebar lock"><span class="tname">Task gate · attempt 2</span></div>
+      <div class="passbar">✓ Passed — prompt released, flow window open</div>
+      <div class="debrief">
+        <div class="col">
+          <h4>You said</h4>
+          <ul style="margin:0;padding-left:18px">
+            <li>Dedupe by delivery id at the route, same key in the poller</li>
+            <li>Replays ack 202 — never an error, never a second decide()</li>
+            <li>Done: replay test green, ledger shows one row per event</li>
+          </ul>
+        </div>
+        <div class="col expert">
+          <h4>An expert also covers</h4>
+          <ul style="margin:0;padding-left:18px">
+            <li>The dedupe table needs a retention window <span class="why">unbounded growth is tomorrow’s incident</span></li>
+            <li>Idempotency keys survive force-push <span class="why">identity by delivery, not SHA — rebases rewrite SHAs</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 7 · REVIEW -->
+  <section class="stage" id="s7">
+    <div class="stage-head"><span class="n">6</span><h2>Nothing merges past you</h2></div>
+    <p class="note">Say what the change does, where it breaks, what proves it works — graded against a hidden review of the <b>real diff</b>. Your findings post as real PR comments.</p>
+    <div class="frame">
+      <div class="titlebar lock"><span class="tname">Review gate · PR #31 — dedupe webhook deliveries</span><div class="tright"><span class="est">~7 min</span></div></div>
+      <div class="screen">
+        <div class="scaffold" style="margin-bottom:12px">
+          <div class="prompt">Where it breaks — the issues you found</div>
+          <div class="findings">
+            <div class="f"><span class="sev">H</span><span>Dedupe INSERT and decide() aren’t in one transaction — a crash between them replays the gate on restart. <span class="posted">→ posted to PR #31</span></span></div>
+            <div class="f"><span class="sev">M</span><span>deliveries table has no pruning — unbounded growth. <span class="posted">→ posted to PR #31</span></span></div>
+          </div>
+          <div class="prompt">What proves it works — tests present, and the gaps</div>
+          <div class="typed">Replay test covers the route. <b>Gap:</b> no test for a replay arriving <i>during</i> decide() — the race the transaction fix exists for.</div>
+          <div class="prompt">Ship or don’t ship, and why</div>
+          <div class="typed">Don’t ship until the transaction lands; the race recreates the bug this PR exists to kill.</div>
+        </div>
+        <div class="kv">required check: lasso/understanding · pending → ✓ on verdict only</div>
+      </div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 8 · DEBUG -->
+  <section class="stage" id="s8">
+    <div class="stage-head"><span class="n">7</span><h2>Bugs end in evidence, not guesses</h2></div>
+    <p class="note">Hypotheses, the evidence that killed them, root cause, regression test. Guessing doesn’t pass.</p>
+    <div class="frame">
+      <div class="titlebar lock"><span class="tname">Debug gate · branch fix/presence-flake</span></div>
+      <div class="screen">
+        <div class="scaffold">
+          <div class="prompt">The symptom, precisely</div>
+          <div class="typed">presence.test.ts fails ~1 in 6 runs: “expected 1 violation, got 0”.</div>
+          <div class="prompt">Hypotheses, and the evidence that killed each</div>
+          <div class="typed">① Timer drift — killed: fake timers, no real clock in the path. ② Test-order dependence — killed: fails solo too. ③ The 3s blur threshold compares wall-clock to the <i>monitor start</i>, not blur start — <b>survives</b>: logging shows elapsed measured from the wrong anchor.</div>
+          <div class="prompt">Root cause — and why it’s not just the symptom</div>
+          <div class="typed">Violation window anchored to monitor start; any test spending &lt;3s before blur can never violate. The flake is scheduling noise over a deterministic bug.</div>
+          <div class="prompt">The fix, plus the regression test that pins it</div>
+          <div class="typed">Anchor to blurAt. Test: blur at t+1ms, advance 3s, expect exactly one violation.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 9 · PER-GATE BARS -->
+  <section class="stage" id="s9">
+    <div class="stage-head"><span class="n">8</span><h2>You set how hard it pushes</h2></div>
+    <p class="note">Drag a bar to set a gate’s difficulty. Harder is instant; easier takes 48 hours; review can’t drop below Light while a deadline is live.</p>
+    <div class="frame">
+      <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso — Settings · Gates</span><div class="tright"><span class="chip">global: Standard</span></div></div>
+      <div class="screen white">
+        <div class="gatebar">
+          <span class="gname">Task</span>
+          <div>
+            <div class="bar"><div class="fill" style="width:50%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:50%"></span></div>
+            <div class="barlabels"><span>Light</span><span class="on">Standard</span><span>Strict</span></div>
+            <div class="barmeaning">Full scaffold, systems + approach graded; done-when required.</div>
+          </div>
+        </div>
+        <div class="gatebar">
+          <span class="gname">Design</span>
+          <div>
+            <div class="bar"><div class="fill" style="width:100%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:100%"></span></div>
+            <div class="barlabels"><span>Light</span><span>Standard</span><span class="on">Strict</span></div>
+            <div class="barmeaning"><span class="custom">✓ custom</span> — tradeoffs need numbers; failure modes red-teamed in the gap map.</div>
+          </div>
+        </div>
+        <div class="gatebar">
+          <span class="gname">Review</span>
+          <div>
+            <div class="bar"><div class="fill" style="width:50%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:50%"></span><span class="floorstop" style="left:2px" title="floor: never below Light while declared"></span></div>
+            <div class="barlabels"><span>Light ⌊floor⌋</span><span class="on">Standard</span><span>Strict</span></div>
+            <div class="barmeaning">Findings vs. the withheld reference review + test gaps. <span class="floor">Floor: can’t drop below Light while a declare is live.</span> Strict adds: write one missing test.</div>
+          </div>
+        </div>
+        <div class="gatebar">
+          <span class="gname">Debug</span>
+          <div>
+            <div class="bar queued"><div class="fill" style="width:50%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:50%"></span></div>
+            <div class="barlabels"><span>Light</span><span class="on">Standard</span><span>Strict</span></div>
+            <div class="barmeaning"><span class="queue">Strict → Standard applies Thu 11:02</span> — easing takes 48h; hardening is instant.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- REAL APP -->
+  <section class="stage" id="real">
+    <div class="stage-head"><span class="n">✓</span><h2>This is the real app, running</h2></div>
+    <p class="note">Not mockups — a live session today. (The gap map and bars above ship next, M14.)</p>
+    <div class="shotgrid">
+      <div class="shot"><figure><img src="real-gate.jpg" alt="The lock window holding a prompt: Context gate, questions, closed-book answer box, confidence tap and submit in the footer" loading="lazy"><figcaption><b>The gate, live.</b> A real prompt held — questions cite the actual repo; paste is off; confidence tap before submit.</figcaption></figure></div>
+      <div class="shot"><figure><img src="real-debrief.jpg" alt="Passed — the debrief: what you said beside what an expert covers" loading="lazy"><figcaption><b>Passed — the debrief.</b> Your answer beside what an expert covers; then the prompt releases.</figcaption></figure></div>
+      <div class="shot"><figure><img src="real-today.jpg" alt="Today: a declared task with countdown and gate chain, money at risk, gates waiting on you as clickable pills" loading="lazy"><figcaption><b>Today.</b> A live task with its countdown and gate chain, and the gates waiting on you.</figcaption></figure></div>
+      <div class="shot"><figure><img src="real-settings.jpg" alt="Settings: per-gate rubrics, add-your-own requirements, depth controls" loading="lazy"><figcaption><b>Settings.</b> Every gate's bar is visible and extensible — built-ins can never be removed; loosening takes 48h.</figcaption></figure></div>
+    </div>
+  </section>
+  <div class="rail" aria-hidden="true"><i></i></div>
+
+  <!-- 10 · THE RAILS -->
+  <section class="stage" id="s10">
+    <div class="stage-head"><span class="n">9</span><h2>Skipping isn’t an option</h2></div>
+    <p class="note">Finish honestly and it costs you nothing. Walk away mid-gate, or sneak code past one — that’s when it costs real money. Every verdict lives server-side.</p>
+    <div class="frame">
+      <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso — ledger</span></div>
+      <div class="screen">
+        <div class="declare" style="border-color:var(--pine)">
+          <div><div class="task">Dedupe webhook deliveries</div><div class="sub">shipped 4:48 pm · every gate passed</div></div>
+          <div class="count" style="color:var(--pine)">$0<div class="sub" style="font-family:var(--sans);font-weight:400">nothing charged</div></div>
+        </div>
+        <div class="declare" style="border-color:var(--sienna); margin-bottom:0">
+          <div><div class="task">Push to dev at 2:11 pm — no gate on record</div><div class="sub">integrity breach · the skipped gate fires before your next delegation</div></div>
+          <div class="count" style="color:var(--sienna)">−$25<div class="sub" style="font-family:var(--sans);font-weight:400">skipping charged</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <span><b>Fullscreen takeover</b> — unclosable, focus-recaptured, 3s away = fee</span>
+      <span><b>Forced retrieval</b> — leave mid-answer and the attempt clears</span>
+      <span><b>Fail-frozen-but-free</b> — outages never auto-pass, never charge</span>
+      <span><b>Five habits</b> — systems · task choice · design · review · debug</span>
+    </div>
+  </section>
+  <p style="margin:84px 0 0;text-align:center;font:500 26px/1.3 var(--serif);color:var(--ink)">No understanding, no delegation, no merge.</p>
+</div>
+<script>
+(function () {
+  var demo = document.getElementById('demo');
+  if (!demo) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    demo.setAttribute('data-step', '4'); // static: the gap-map moment
+    return;
+  }
+  // step: 0 blank → 1 prompt typed → 2 held → 3 lock pops, answer shown → 4 gap map + rewrite → 5 cleared + pass → loop
+  var dwell = [900, 1200, 1300, 2200, 4200, 2400], step = 0;
+  function next() {
+    step = (step + 1) % 6;
+    demo.setAttribute('data-step', String(step));
+    setTimeout(next, dwell[step]);
+  }
+  setTimeout(next, dwell[0]);
+})();
+</script>
