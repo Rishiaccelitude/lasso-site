@@ -67,6 +67,20 @@
   .herodemo[data-step="5"] .hd-pass { opacity: 1; }
 
 
+  /* session rhythm — gates pop up briefly, then disappear */
+  .rhythm { display: flex; align-items: center; gap: 0; margin-top: 26px; max-width: 760px; }
+  .rhythm .r-node { flex: none; font-size: 12px; white-space: nowrap; }
+  .r-start { background: #2B2F26; color: #C9CEC2; font-family: var(--mono); border-radius: 8px; padding: 6px 12px; }
+  .r-flow { flex: 1; min-width: 40px; border-top: 2px dashed var(--hairline); position: relative; }
+  .r-flow i { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: var(--paper); padding: 0 8px; font-size: 11px; color: var(--faint); font-style: normal; white-space: nowrap; }
+  .r-flow.long { flex: 2.6; }
+  .r-gate { background: var(--pine); color: #fff; border-radius: 9px; padding: 6px 12px; font-weight: 600; box-shadow: 0 6px 16px -8px rgba(17,94,69,.55); animation: gatepop 3.2s ease-in-out infinite; }
+  .r-gate small { display: block; font-weight: 400; opacity: .8; font-size: 10.5px; }
+  @keyframes gatepop { 0%,18%,100% { transform: translateY(0); } 8% { transform: translateY(-3px); } }
+  @media (prefers-reduced-motion: reduce) { .r-gate { animation: none; } }
+  .r-merge { border: 1.5px solid var(--pine); color: var(--pine); border-radius: 9px; padding: 5px 12px; font-weight: 600; background: var(--pine-wash); }
+  @media (max-width: 640px) { .rhythm { flex-wrap: wrap; gap: 8px; } .r-flow { min-width: 100%; order: 0; border-top: 0; height: 14px; border-left: 2px dashed var(--hairline); margin-left: 20px; } .r-flow i { display: none; } }
+
   /* takeover moment */
   .desk { position: relative; padding: 26px 20px 30px; background: var(--paper); }
   .behind { filter: blur(1.5px) saturate(.7); opacity: .55; pointer-events: none; }
@@ -258,6 +272,15 @@
     </div>
 
     <p style="margin-top:20px">Gates you can’t get around, at the moments work moves. Every pass sharpens a skill you keep.</p>
+    <div class="rhythm" aria-label="A session: the gate appears for minutes, disappears for hours, returns at the next moment work moves">
+      <span class="r-node r-start">› new task</span>
+      <span class="r-flow"></span>
+      <span class="r-node r-gate">🪢 task gate<small>~3 min</small></span>
+      <span class="r-flow long"><i>you + the agent build — hours, uninterrupted</i></span>
+      <span class="r-node r-gate">🪢 review gate<small>~7 min</small></span>
+      <span class="r-flow"></span>
+      <span class="r-node r-merge">✓ merged</span>
+    </div>
   </header>
 
   <div style="margin-top:72px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)">One task, start to finish</div>
