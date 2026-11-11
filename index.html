@@ -68,7 +68,7 @@
 
 
   /* session rhythm — gates pop up briefly, then disappear */
-  .rhythm { display: flex; align-items: center; gap: 0; margin-top: 26px; max-width: 760px; }
+  .rhythm { display: flex; align-items: center; gap: 0; margin-top: 26px; margin-bottom: 44px; max-width: 760px; }
   .rhythm .r-node { flex: none; font-size: 12px; white-space: nowrap; }
   .r-start { background: #2B2F26; color: #C9CEC2; font-family: var(--mono); border-radius: 8px; padding: 6px 12px; }
   .r-flow { flex: 1; min-width: 40px; border-top: 2px dashed var(--hairline); position: relative; }
@@ -76,6 +76,9 @@
   .r-flow.long { flex: 2.6; }
   .r-gate { background: var(--pine); color: #fff; border-radius: 9px; padding: 6px 12px; font-weight: 600; box-shadow: 0 6px 16px -8px rgba(17,94,69,.55); animation: gatepop 3.2s ease-in-out infinite; }
   .r-gate small { display: block; font-weight: 400; opacity: .8; font-size: 10.5px; }
+  .r-gate { position: relative; }
+  .r-skip { position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); color: var(--sienna); border: 1px dashed var(--sienna); border-radius: 8px; padding: 2px 9px; font-size: 10.5px; font-weight: 600; white-space: nowrap; background: var(--paper); animation: none; }
+  .r-skip::before { content: ""; position: absolute; bottom: 100%; left: 50%; height: 11px; border-left: 1.5px dashed var(--sienna); }
   @keyframes gatepop { 0%,18%,100% { transform: translateY(0); } 8% { transform: translateY(-3px); } }
   @media (prefers-reduced-motion: reduce) { .r-gate { animation: none; } }
   .r-merge { border: 1.5px solid var(--pine); color: var(--pine); border-radius: 9px; padding: 5px 12px; font-weight: 600; background: var(--pine-wash); }
@@ -277,7 +280,7 @@
       <span class="r-flow"></span>
       <span class="r-node r-gate">🪢 task gate<small>~3 min</small></span>
       <span class="r-flow long"><i>you + the agent build — hours, uninterrupted</i></span>
-      <span class="r-node r-gate">🪢 review gate<small>~7 min</small></span>
+      <span class="r-node r-gate">🪢 review gate<small>~7 min</small><span class="r-skip">skip it → −$25</span></span>
       <span class="r-flow"></span>
       <span class="r-node r-merge">✓ merged</span>
     </div>
