@@ -73,18 +73,18 @@
 
 
   /* session rhythm — gates appear for minutes, vanish for hours */
-  .rhythm { display: flex; align-items: center; margin: 48px auto 10px; width: 100%; max-width: 680px; text-align: left; }
+  .rhythm { display: flex; align-items: center; margin: 52px auto 0; width: 100%; max-width: 680px; text-align: left; }
   .rhythm .r-node { flex: none; font-size: 12px; line-height: 1.25; white-space: nowrap; }
   .r-start { background: #2B2F26; color: #C9CEC2; font-family: var(--mono); font-size: 11.5px; border-radius: 8px; padding: 7px 13px; }
   .r-flow { flex: 1; min-width: 34px; border-top: 1.5px dashed #D6D3C6; position: relative; }
   .r-flow.long { flex: 2.4; }
-  .r-flow i { position: absolute; top: -24px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--faint); font-style: normal; white-space: nowrap; letter-spacing: .01em; }
+  .r-flow i { position: absolute; top: 9px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--faint); font-style: normal; white-space: nowrap; letter-spacing: .01em; }
   .r-gate { position: relative; background: var(--card); border: 1.5px solid var(--pine); color: var(--pine); border-radius: 9px; padding: 5px 13px; font-weight: 600; text-align: center; }
   .r-gate small { display: block; font-weight: 400; color: var(--muted); font-size: 10.5px; }
   .r-skip { position: absolute; top: calc(100% + 13px); left: 50%; transform: translateX(-50%); color: var(--sienna); font-size: 10.5px; font-weight: 500; white-space: nowrap; }
   .r-skip::before { content: ""; position: absolute; bottom: calc(100% + 2px); left: 50%; height: 9px; border-left: 1.5px dotted var(--sienna); opacity: .7; }
   .r-merge { background: var(--pine); border: 1.5px solid var(--pine); color: #fff; border-radius: 9px; padding: 6px 13px; font-weight: 600; }
-  .rhythm-cap { text-align: center; font-size: 12.5px; color: var(--faint); margin: 30px 0 0; }
+  .rhythm-cap { text-align: center; font-size: 12.5px; color: var(--faint); margin: 58px 0 0; }
   @media (max-width: 640px) {
     .rhythm { flex-wrap: wrap; gap: 10px 8px; justify-content: center; }
     .r-flow { display: none; }
