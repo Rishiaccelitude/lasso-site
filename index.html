@@ -70,6 +70,13 @@
   .hd-pass { color: var(--pine); font-weight: 600; }
   .herodemo[data-step="4"] .hd-rewrite { opacity: 1; }
   .herodemo[data-step="5"] .hd-pass { opacity: 1; }
+  .hd-step { position: relative; height: 20px; margin-top: 14px; text-align: center; font-size: 13px; color: var(--muted); }
+  .hd-step span { position: absolute; left: 0; right: 0; opacity: 0; transition: opacity .3s ease-out; }
+  .herodemo[data-step="0"] .hd-s0, .herodemo[data-step="1"] .hd-s0 { opacity: 1; }
+  .herodemo[data-step="2"] .hd-s2 { opacity: 1; }
+  .herodemo[data-step="3"] .hd-s3 { opacity: 1; }
+  .herodemo[data-step="4"] .hd-s4 { opacity: 1; }
+  .herodemo[data-step="5"] .hd-s5 { opacity: 1; }
 
 
   /* session rhythm — gates appear for minutes, vanish for hours */
@@ -259,7 +266,7 @@
   <header class="hero">
     <div class="brand"><div class="knot" aria-hidden="true"></div><span class="wordmark">Lasso</span></div>
     <h1>You can’t ship what you can’t explain.</h1>
-    <p>Lasso harnesses your understanding of what the AI builds. Watch:</p>
+    <p>Lasso rides along with your AI coding agent — and harnesses your understanding of what it builds. Watch:</p>
 
     <div class="herodemo" id="demo" data-step="0" aria-label="Demo: a prompt is held until you explain your understanding">
       <div class="termcard hd-term"><span class="p">~/app $</span> claude<br><span class="hd-prompt">&gt; wire up the payment webhook</span><br><span class="p hd-held">⏸ Lasso: gate open — prompt held until you pass</span></div>
@@ -278,6 +285,13 @@
             <span class="hd-pass">✓ Passed — prompt released, build on</span>
           </div>
         </div>
+      </div>
+      <div class="hd-step" aria-hidden="true">
+        <span class="hd-s0">1 · You hand work to the agent…</span>
+        <span class="hd-s2">2 · Lasso holds it — gate open.</span>
+        <span class="hd-s3">3 · You explain it. Closed book.</span>
+        <span class="hd-s4">4 · It marks exactly what's missing.</span>
+        <span class="hd-s5">5 · Right it, pass it — the work flows.</span>
       </div>
     </div>
 
@@ -400,6 +414,12 @@
     <div class="frame">
       <div class="titlebar lock"><span class="tname">Task gate · attempt 1 — close, not yet</span><div class="tright"><span class="est">rewrite from scratch to continue</span></div></div>
       <div class="screen">
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:10px">
+          <span><b style="color:var(--pine)">✓</b> solid</span>
+          <span><b style="color:var(--gold)">~</b> vague</span>
+          <span><b style="color:var(--faint)">∅</b> missing</span>
+          <span><b style="color:var(--sienna)">✕</b> wrong</span>
+        </div>
         <div class="coverage"><span class="lbl">Coverage</span><i class="full"></i><i class="full"></i><i class="half"></i><i class="empty"></i><i class="empty"></i></div>
         <div class="gm">
           <div class="line solid"><span class="mark">✓</span><span class="t">Replayed webhook deliveries can flip a check twice and double-charge a stake…</span></div>
