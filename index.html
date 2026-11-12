@@ -17,23 +17,28 @@
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   .stage { scroll-margin-top: 24px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .stage { opacity: 0; transform: translateY(16px); transition: opacity .55s ease-out, transform .55s ease-out; }
+    .stage.in { opacity: 1; transform: none; }
+  }
   body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--sans); }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px 96px; }
 
   /* ---------- gallery narration (meta layer) ---------- */
-  .hero { padding: 72px 0 40px; }
+  .hero { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 72px 0 40px; }
+  .hero .brand { justify-content: center; }
   .hero .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
   .hero .knot { width: 30px; height: 30px; border: 2px solid var(--pine); border-radius: 50%; position: relative; }
   .hero .knot::after { content: ""; position: absolute; inset: 6px; border: 2px solid var(--pine); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
   .hero .wordmark { font: 600 17px var(--sans); letter-spacing: -0.01em; }
-  .hero h1 { font: 500 44px/1.12 var(--serif); letter-spacing: -0.015em; margin: 0 0 14px; max-width: 18ch; text-wrap: balance; }
-  .hero p { color: var(--body); max-width: 58ch; margin: 0 0 6px; font-size: 17px; }
+  .hero h1 { font: 500 clamp(44px, 6.5vw, 62px)/1.1 var(--serif); letter-spacing: -0.018em; margin: 0 0 16px; max-width: 16ch; text-wrap: balance; }
+  .hero p { color: var(--body); max-width: 54ch; margin: 0 0 6px; font-size: 17.5px; }
   .hero .loop { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 18px; font-size: 14px; color: var(--muted); }
   .hero .loop b { color: var(--pine); font-weight: 600; }
   .hero .loop span.arrow { color: var(--faint); }
 
   /* hero demo — show, don't tell */
-  .herodemo { position: relative; margin-top: 18px; max-width: 620px; }
+  .herodemo { position: relative; margin: 26px auto 0; width: 100%; max-width: 620px; text-align: left; }
   .hd-term { position: relative; z-index: 1; }
   .hd-prompt, .hd-held { opacity: 0; transition: opacity .3s ease-out; }
   .herodemo[data-step="1"] .hd-prompt,
@@ -68,7 +73,7 @@
 
 
   /* session rhythm — gates pop up briefly, then disappear */
-  .rhythm { display: flex; align-items: center; gap: 0; margin-top: 26px; margin-bottom: 44px; max-width: 760px; }
+  .rhythm { display: flex; align-items: center; gap: 0; margin: 40px auto 44px; width: 100%; max-width: 760px; text-align: left; }
   .rhythm .r-node { flex: none; font-size: 12px; white-space: nowrap; }
   .r-start { background: #2B2F26; color: #C9CEC2; font-family: var(--mono); border-radius: 8px; padding: 6px 12px; }
   .r-flow { flex: 1; min-width: 40px; border-top: 2px dashed var(--hairline); position: relative; }
@@ -104,10 +109,10 @@
   .withheld { border: 1px dashed var(--hairline); border-radius: 10px; padding: 3px 11px; color: var(--faint); background: var(--paper); }
   .withheld s { text-decoration-color: var(--faint); text-decoration-thickness: 1px; }
 
-  .stage { margin-top: 72px; }
+  .stage { margin-top: 108px; }
   .stage-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
-  .stage-head .n { font: 600 12px var(--mono); color: var(--pine); border: 1px solid var(--pine); border-radius: 10px; padding: 1px 9px; }
-  .stage-head h2 { font: 500 25px/1.2 var(--serif); margin: 0; letter-spacing: -0.01em; }
+  .stage-head .n { display: none; }
+  .stage-head h2 { font: 500 clamp(26px, 3.6vw, 33px)/1.18 var(--serif); margin: 0; letter-spacing: -0.012em; }
   .stage > .note { color: var(--body); max-width: 62ch; margin: 0 0 20px; font-size: 16px; line-height: 1.65; }
   .stage > .note b { color: var(--ink); font-weight: 600; }
 
@@ -241,8 +246,8 @@
   .shot figure { margin: 0; }
 
   /* flow rail between stages */
-  .rail { display: flex; justify-content: center; margin: 26px 0 -46px; }
-  .rail i { width: 1.5px; height: 46px; background: var(--hairline); }
+  .rail { display: flex; justify-content: center; margin: 40px 0 -74px; }
+  .rail i { width: 1.5px; height: 70px; background: var(--hairline); }
 
   .foot { margin-top: 80px; border-top: 1px solid var(--hairline); padding-top: 20px; color: var(--faint); font-size: 12.5px; display: flex; gap: 16px; flex-wrap: wrap; }
   .foot b { color: var(--muted); font-weight: 600; }
@@ -573,7 +578,11 @@
       <span><b>Five habits</b> — systems · task choice · design · review · debug</span>
     </div>
   </section>
-  <p style="margin:84px 0 0;text-align:center;font:500 26px/1.3 var(--serif);color:var(--ink)">No understanding, no delegation, no merge.</p>
+  <div style="margin:150px 0 40px;text-align:center">
+    <div class="knot" style="width:30px;height:30px;border:2px solid var(--pine);border-radius:50%;position:relative;margin:0 auto 22px"><span style="content:'';position:absolute;inset:6px;border:2px solid var(--pine);border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:block"></span></div>
+    <p style="margin:0;font:500 clamp(28px,4.5vw,40px)/1.25 var(--serif);color:var(--ink);letter-spacing:-0.015em">No understanding,<br>no delegation, no merge.</p>
+    <p style="margin:14px 0 0;color:var(--muted);font-size:15px">Lasso</p>
+  </div>
 </div>
 <script>
 (function () {
@@ -591,5 +600,12 @@
     setTimeout(next, dwell[step]);
   }
   setTimeout(next, dwell[0]);
+})();
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.stage').forEach(function (el) { io.observe(el); });
 })();
 </script>
