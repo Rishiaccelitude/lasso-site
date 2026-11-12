@@ -84,7 +84,7 @@
   .r-skip { position: absolute; top: calc(100% + 13px); left: 50%; transform: translateX(-50%); color: var(--sienna); font-size: 10.5px; font-weight: 500; white-space: nowrap; }
   .r-skip::before { content: ""; position: absolute; bottom: calc(100% + 2px); left: 50%; height: 9px; border-left: 1.5px dotted var(--sienna); opacity: .7; }
   .r-merge { background: var(--pine); border: 1.5px solid var(--pine); color: #fff; border-radius: 9px; padding: 6px 13px; font-weight: 600; }
-  .rhythm-cap { text-align: center; font-size: 12.5px; color: var(--faint); margin: 58px 0 0; }
+  .rhythm-cap { text-align: center; font-size: 13px; color: var(--muted); margin: 22px 0 0; }
   @media (max-width: 640px) {
     .rhythm { flex-wrap: wrap; gap: 10px 8px; justify-content: center; }
     .r-flow { display: none; }
@@ -286,12 +286,12 @@
       <span class="r-node r-start">› new task</span>
       <span class="r-flow"></span>
       <span class="r-node r-gate">task gate<small>3 min</small></span>
-      <span class="r-flow long"><i>hours of building, uninterrupted</i></span>
-      <span class="r-node r-gate">review gate<small>7 min</small><span class="r-skip">skip → −$25</span></span>
+      <span class="r-flow long"></span>
+      <span class="r-node r-gate">review gate<small>7 min</small></span>
       <span class="r-flow"></span>
       <span class="r-node r-merge">✓ merged</span>
     </div>
-    <p class="rhythm-cap">Minutes at the gate. Hours in flow.</p>
+    <p class="rhythm-cap">Minutes at the gate. Hours in flow. <span style="color:var(--sienna)">Skip one → −$25.</span></p>
   </header>
 
   <div style="margin-top:72px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)">One task, start to finish</div>
