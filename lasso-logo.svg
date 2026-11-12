@@ -1,9 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <g transform="rotate(-8 50 50)">
-    <rect x="4" y="4" width="92" height="92" rx="11" fill="#115E45"/>
-    <circle cx="50.9" cy="36.2" r="18.4" fill="none" stroke="#F7F6F2" stroke-width="6.4"/>
-    <path d="M 50.9 54.6 Q 27 66.6 48.2 78.5 Q 75.8 94.1 86.8 77.6" fill="none" stroke="#F7F6F2" stroke-width="6.4" stroke-linecap="round"/>
-    <circle cx="50.9" cy="54.6" r="6.8" fill="#115E45"/>
-    <circle cx="50.9" cy="54.6" r="4.6" fill="#C9A227"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Lasso mark v3 — a thrown lasso: open loop, gold honda knot low-left,
+       live tail dragging right. Pine tile, paper rope, one gold accent. -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#17684E"/>
+      <stop offset="1" stop-color="#0D4A36"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#tile)"/>
+  <rect x="7" y="7" width="498" height="498" rx="110" fill="none" stroke="#FFFFFF" stroke-opacity=".07" stroke-width="6"/>
+  <g fill="none" stroke-linecap="round">
+    <!-- the loop, tilted like a throw -->
+    <g transform="rotate(12 250 208)">
+      <ellipse cx="250" cy="208" rx="148" ry="122" stroke="#F4EFE2" stroke-width="35"/>
+    </g>
+    <!-- the tail: hangs from the knot, swings right in a live S -->
+    <path d="M 148 316 C 120 376 196 416 272 402 C 348 388 386 414 394 452"
+          stroke="#F4EFE2" stroke-width="35"/>
+    <!-- depth: the tail passes under the loop's lower arc -->
+    <path d="M 148 316 C 130 352 146 378 176 392" stroke="#0D4A36" stroke-width="47" stroke-opacity=".55"/>
+    <path d="M 148 316 C 120 376 196 416 272 402" stroke="#F4EFE2" stroke-width="35"/>
   </g>
+  <!-- the honda knot: gold cinch where loop meets tail -->
+  <circle cx="148" cy="316" r="44" fill="#D9B64A"/>
+  <circle cx="148" cy="316" r="17" fill="#0D4A36"/>
 </svg>
