@@ -504,30 +504,11 @@
   <div class="rail" aria-hidden="true"><i></i></div>
 
   <!-- 8 · DEBUG -->
-  <section class="stage" id="s8">
-    <div class="stage-head"><span class="n">7</span><h2>Bugs end in evidence, not guesses</h2></div>
-    <p class="note">Hypotheses, evidence, root cause, regression test — guessing fails.</p>
-    <div class="frame">
-      <div class="titlebar lock"><span class="tname">Debug gate · branch fix/presence-flake</span></div>
-      <div class="screen">
-        <div class="scaffold">
-          <div class="prompt">The symptom, precisely</div>
-          <div class="typed">presence.test.ts fails ~1 in 6 runs: “expected 1 violation, got 0”.</div>
-          <div class="prompt">Hypotheses, and the evidence that killed each</div>
-          <div class="typed">① Timer drift, killed: fake timers, no real clock in the path. ② Test-order dependence, killed: fails solo too. ③ The 3s blur threshold compares wall-clock to the <i>monitor start</i>, not blur start. <b>survives</b>: logging shows elapsed measured from the wrong anchor.</div>
-          <div class="prompt">Root cause, and why it’s not just the symptom</div>
-          <div class="typed">Violation window anchored to monitor start; any test spending &lt;3s before blur can never violate. The flake is scheduling noise over a deterministic bug.</div>
-          <div class="prompt">The fix, plus the regression test that pins it</div>
-          <div class="typed">Anchor to blurAt. Test: blur at t+1ms, advance 3s, expect exactly one violation.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <div class="rail" aria-hidden="true"><i></i></div>
+  
 
   <!-- 9 · PER-GATE BARS -->
   <section class="stage" id="s9">
-    <div class="stage-head"><span class="n">8</span><h2>You set how hard it pushes</h2></div>
+    <div class="stage-head"><span class="n">7</span><h2>You set how hard it pushes</h2></div>
     <p class="note">Set each gate's difficulty. Harder is instant; easier takes 48 hours.</p>
     <div class="frame">
       <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso · Settings · Gates</span><div class="tright"><span class="chip">global: Standard</span></div></div>
@@ -570,22 +551,11 @@
   <div class="rail" aria-hidden="true"><i></i></div>
 
   <!-- REAL APP -->
-  <section class="stage" id="real">
-    <div class="stage-head"><span class="n">✓</span><h2>This is the real app, running</h2></div>
-    <p class="note">Not mockups — a real session, captured live.</p>
-    <div class="shotgrid">
-      <div class="shot"><figure><img src="real-gate.jpg" alt="The lock window holding a prompt: Context gate, sizing rationale, scaffold, closed-book answer box, with Not sure — study first and Check understanding in the footer" loading="lazy"><figcaption><b>The gate, live.</b> A real prompt held. Two doors: check your understanding, or study first.</figcaption></figure></div>
-      <div class="shot"><figure><img src="real-study.jpg" alt="Coverage checklist and lesson in the study room" loading="lazy"><figcaption><b>Checked, then taught.</b> ✓ what you got, ✗ what you missed — then a short lesson on exactly that. No timer.</figcaption></figure></div>
-      <div class="shot"><figure><img src="real-debrief.jpg" alt="Passed, the debrief: what you said beside what an expert covers" loading="lazy"><figcaption><b>Passed.</b> Your answer next to an expert's, then the work releases.</figcaption></figure></div>
-      <div class="shot"><figure><img src="real-today.jpg" alt="Today: a declared task with countdown and gate chain, money at risk, gates waiting on you as clickable pills" loading="lazy"><figcaption><b>Today.</b> Your tasks, deadlines, and what's waiting on you.</figcaption></figure></div>
-      <div class="shot"><figure><img src="real-settings.jpg" alt="Settings: per-gate rubrics, add-your-own requirements, depth controls" loading="lazy"><figcaption><b>Settings.</b> Every gate's bar, visible and adjustable.</figcaption></figure></div>
-    </div>
-  </section>
-  <div class="rail" aria-hidden="true"><i></i></div>
+  
 
   <!-- 10 · THE RAILS -->
   <section class="stage" id="s10">
-    <div class="stage-head"><span class="n">9</span><h2>Skipping isn’t an option</h2></div>
+    <div class="stage-head"><span class="n">8</span><h2>Skipping your understanding isn’t an option</h2></div>
     <p class="note">Finish honestly: free. Walk away or sneak past a gate: real money.</p>
     <div class="frame">
       <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso · ledger</span></div>
