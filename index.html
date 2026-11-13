@@ -282,6 +282,7 @@
     .gm-foot { flex-wrap: wrap; gap: 8px; }
     .foot { gap: 10px; font-size: 12px; }
   }
+  .realshot { width: 100%; border: 1px solid var(--hairline); border-radius: 14px; box-shadow: 0 16px 44px -18px rgba(35,40,25,.25); display: block; }
 </style>
 
 <div class="wrap">
@@ -337,27 +338,7 @@
   <section class="stage" id="s1" style="margin-top:14px">
     <div class="stage-head"><span class="n">1</span><h2>Your tasks live in Lasso</h2></div>
     <p class="note">A simple list of what you're building, with a deadline and where each task stands.</p>
-    <div class="frame">
-      <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso · Today</span></div>
-      <div class="screen">
-        <div class="today-head">
-          <h3>Today</h3>
-          <span class="seg"><span>Light</span><span class="active">Standard</span><span>Strict</span></span>
-          <span class="chip">trend ▲ 74%</span>
-        </div>
-        <div class="declare">
-          <div>
-            <div class="task">Dedupe webhook deliveries so replays can’t double-fire gates</div>
-            <div class="sub">declared · repo lasso</div>
-            <div class="chain">
-              <span class="step done">map ✓</span><span class="step open">task ●</span><span class="step">build</span><span class="step">review</span><span class="step">merged</span>
-            </div>
-          </div>
-          <div class="count">5:42:10<div class="sub" style="font-family:var(--sans);font-weight:400">by 6:00 pm</div></div>
-        </div>
-        <div class="composer">Add a task… <b>fix flaky presence test by friday</b></div>
-      </div>
-    </div>
+    <img class="realshot" src="shots/01-today.jpg" alt="The real Today screen: declared tasks, deadlines, stakes, and the gate chain">
   </section>
   <section class="stage" id="how">
     <div class="stage-head"><span class="n">→</span><h2>How it fits your day</h2></div>
@@ -368,107 +349,18 @@
   <!-- 2 · TAKEOVER -->
   <section class="stage" id="s2">
     <div class="stage-head"><span class="n">2</span><h2>A gate takes over your screen</h2></div>
-    <p class="note">It only appears when work is about to move. The rest of the time you never see it.</p>
-    <div class="frame">
-      <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Your screen, 2:03 pm</span></div>
-      <div class="desk">
-        <div class="behind">
-          <div class="termcard"><span class="p">~/lasso $</span> claude<br>&gt; implement webhook dedupe by delivery id<br><span class="p">⏸ Lasso: context gate pending, prompt held</span></div>
-        </div>
-        <div class="lockpop" role="dialog" aria-label="Lasso lock window">
-          <div class="lp-head">🪢 Lasso · Task gate · lasso <span style="margin-left:auto;font-weight:400;opacity:.85">~4 min</span></div>
-          <div class="lp-body">
-            <p><b>Before this prompt goes out:</b> explain what you're building, from memory.</p>
-            <p style="color:var(--muted)">Fullscreen, can't be closed. Pass, or pay to abandon.</p>
-          </div>
-        </div>
-        <div class="rulechips">
-          <span class="rulechip"><b>No close button</b>: it stays on top</span><!-- takeover-anchor -->
-          <span class="rulechip"><b>No switching away</b>: it pulls focus right back</span>
-          <span class="rulechip warn"><b>Look away too long</b>: small fee, and your attempt resets</span>
-          <span class="rulechip"><b>Always an exit</b>: you can abandon, it just costs money</span>
-        </div>
-      </div>
-    </div>
+    <p class="note">It only appears when work is about to move. Closed book: no notes, no code, no pasting. If you really understand something, you can say it in your own words.</p>
+    <img class="realshot" src="shots/02-attempt.jpg" alt="The real gate: examiner-written questions and an empty answer box, from memory only">
   </section>
   <div class="rail" aria-hidden="true"><i></i></div>
 
   <!-- 3 · WRITE -->
-  <section class="stage" id="s3">
-    <div class="stage-head"><span class="n">3</span><h2>You explain it from memory</h2></div>
-    <p class="note">No notes, no code, no pasting. If you really understand something, you can say it in your own words.</p>
-    <div class="frame">
-      <div class="titlebar lock">
-        <span class="tname">Task gate · lasso</span>
-        <div class="tright">
-          <span class="rubricdots" aria-label="rubric progress"><i></i><i></i><i></i><i></i><i></i></span>
-          <span class="est">~4 min</span>
-        </div>
-      </div>
-      <div class="screen">
-        <div class="closedbook">
-          <span class="cb-lbl">Closed book, hidden until you pass:</span>
-          <span class="withheld"><s>your task brief</s></span>
-          <span class="withheld"><s>the code</s></span>
-          <span class="withheld"><s>Claude’s output</s></span>
-          <span class="withheld"><s>your notes</s></span>
-          <span class="withheld">paste off</span>
-        </div>
-        <div class="scaffold">
-          <div class="prompt">Why this task, why now, what it unlocks, what you’re deliberately not doing</div>
-          <div class="typed">Replayed webhook deliveries can flip a check twice and double-charge a stake, it blocks trusting the ledger. Not touching polling fallback; it already dedupes.</div>
-          <div class="prompt">The problem, in your own words</div>
-          <div class="typed">GitHub redelivers webhooks on timeout. We treat each delivery as new, so one PR event can create two gates.</div>
-          <div class="prompt">The systems involved, and how data moves between them</div>
-          <div class="typed">GitHub → webhook route → gate engine → SQLite ledger. The lock window only renders what the server decides.<span class="caret"></span></div>
-          <div class="prompt">Your approach, and why over the alternatives</div>
-          <div class="prompt">Done means…</div>
-        </div>
-        <div class="lockfoot">
-          <button class="btn quiet">Not sure? Study first</button>
-          <button class="btn primary">Check understanding</button>
-          <span class="abandon">Abandon, $5 <small>· work stays frozen, gate resumes</small></span>
-        </div>
-      </div>
-    </div>
-  </section>
-  <div class="rail" aria-hidden="true"><i></i></div>
 
   <!-- 4 · GAP MAP -->
   <section class="stage" id="s4">
     <div class="stage-head"><span class="n">4</span><h2>It shows you what you missed, then teaches it</h2></div>
     <p class="note">A check for what you got right, an X for what you missed. Then Lasso fills in the gap: a short lesson, no time limit. Your tools stay open the whole time. Only moving forward stays locked, until you can answer again and pass.</p>
-    <div class="frame">
-      <div class="titlebar lock"><span class="tname">Task gate · attempt 1, close, not yet</span><div class="tright"><span class="est">rewrite from scratch to continue</span></div></div>
-      <div class="screen">
-        <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:10px">
-          <span><b style="color:var(--pine)">✓</b> solid</span>
-          <span><b style="color:var(--gold)">~</b> vague</span>
-          <span><b style="color:var(--faint)">∅</b> missing</span>
-          <span><b style="color:var(--sienna)">✕</b> wrong</span>
-        </div>
-        <div class="coverage"><span class="lbl">Coverage</span><i class="full"></i><i class="full"></i><i class="half"></i><i class="empty"></i><i class="empty"></i></div>
-        <div class="gm">
-          <div class="line solid"><span class="mark">✓</span><span class="t">Replayed webhook deliveries can flip a check twice and double-charge a stake…</span></div>
-          <div class="line solid"><span class="mark">✓</span><span class="t">GitHub redelivers webhooks on timeout. We treat each delivery as new…</span></div>
-          <div class="line vague"><span class="mark">~</span><span class="t">GitHub → webhook route → gate engine → SQLite ledger.</span></div>
-        </div>
-        <div class="push gold"><b>Where exactly does a delivery become a gate?</b> You’ve named the boxes but not the hand-off that duplicates.<span class="cite">webhooks.ts:41 → engine.decide(), the call replays pass through twice</span></div>
-        <div class="gm" style="margin-top:10px">
-          <div class="line wrong"><span class="mark">✕</span><span class="t">“Polling fallback already dedupes.”</span></div>
-        </div>
-        <div class="push rust"><b>The repo disagrees.</b> The poller inserts by (repo, event) with no delivery id, replays reach it clean. What key would make both paths idempotent?<span class="cite">watchdog.ts:88, pollOnce() has no delivery-id check</span></div>
-        <div class="gm" style="margin-top:10px">
-          <div class="line missing"><span class="mark">∅</span><span class="t">Your approach, and why over the alternatives, not written</span></div>
-          <div class="line missing"><span class="mark">∅</span><span class="t">Done means…, not written</span></div>
-        </div>
-        <div class="gm-foot">
-          <button class="btn">Re-study · 6 min</button>
-          <button class="btn primary">Rewrite from scratch</button>
-          <span>Your draft clears. Patched sentences aren’t understanding.</span>
-        </div>
-      </div>
-    </div>
+    <img class="realshot" src="shots/03-checklist.jpg" alt="The real verdict: a green check for what landed, red x rows with one pushback each">
   </section>
   
   <div class="rail" aria-hidden="true"><i></i></div>
@@ -477,27 +369,7 @@
   <section class="stage" id="s6">
     <div class="stage-head"><span class="n">5</span><h2>Pass, and the work unlocks</h2></div>
     <p class="note">You see your answer next to what an expert would say. Then your prompt goes through and you keep building.</p>
-    <div class="frame">
-      <div class="titlebar lock"><span class="tname">Task gate · attempt 2</span></div>
-      <div class="passbar">✓ Passed, prompt released, flow window open</div>
-      <div class="debrief">
-        <div class="col">
-          <h4>You said</h4>
-          <ul style="margin:0;padding-left:18px">
-            <li>Dedupe by delivery id at the route, same key in the poller</li>
-            <li>Replays ack 202, never an error, never a second decide()</li>
-            <li>Done: replay test green, ledger shows one row per event</li>
-          </ul>
-        </div>
-        <div class="col expert">
-          <h4>An expert also covers</h4>
-          <ul style="margin:0;padding-left:18px">
-            <li>The dedupe table needs a retention window <span class="why">unbounded growth is tomorrow’s incident</span></li>
-            <li>Idempotency keys survive force-push <span class="why">identity by delivery, not SHA, rebases rewrite SHAs</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <img class="realshot" src="shots/07-passed.jpg" alt="The real pass debrief: your answer beside what an expert also covers">
   </section>
   <div class="rail" aria-hidden="true"><i></i></div>
 
@@ -505,23 +377,7 @@
   <section class="stage" id="s7">
     <div class="stage-head"><span class="n">6</span><h2>No merge until you understand the change</h2></div>
     <p class="note">Before a PR can merge, you review it yourself, in your own tools. Lasso checks your review against what's actually in the code.</p>
-    <div class="frame">
-      <div class="titlebar lock"><span class="tname">Review gate · PR #31, dedupe webhook deliveries</span><div class="tright"><span class="est">~7 min</span></div></div>
-      <div class="screen">
-        <div class="scaffold" style="margin-bottom:12px">
-          <div class="prompt">Where it breaks, the issues you found</div>
-          <div class="findings">
-            <div class="f"><span class="sev">H</span><span>Dedupe INSERT and decide() aren’t in one transaction, a crash between them replays the gate on restart. <span class="posted">→ posted to PR #31</span></span></div>
-            <div class="f"><span class="sev">M</span><span>deliveries table has no pruning, unbounded growth. <span class="posted">→ posted to PR #31</span></span></div>
-          </div>
-          <div class="prompt">What proves it works, tests present, and the gaps</div>
-          <div class="typed">Replay test covers the route. <b>Gap:</b> no test for a replay arriving <i>during</i> decide(), the race the transaction fix exists for.</div>
-          <div class="prompt">Ship or don’t ship, and why</div>
-          <div class="typed">Don’t ship until the transaction lands; the race recreates the bug this PR exists to kill.</div>
-        </div>
-        <div class="kv">required check: lasso/understanding · pending → ✓ on verdict only</div>
-      </div>
-    </div>
+    <img class="realshot" src="shots/08-review.jpg" alt="The real review gate: the diff, line flagging, and the tests question">
   </section>
   <div class="rail" aria-hidden="true"><i></i></div>
 
@@ -532,43 +388,7 @@
   <section class="stage" id="s9">
     <div class="stage-head"><span class="n">7</span><h2>You choose how strict it is</h2></div>
     <p class="note">Each gate has a difficulty you control. Making it harder applies right away. Making it easier takes 48 hours, so you can't loosen it in a weak moment.</p>
-    <div class="frame">
-      <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso · Settings · Gates</span><div class="tright"><span class="chip">global: Standard</span></div></div>
-      <div class="screen white">
-        <div class="gatebar">
-          <span class="gname">Task</span>
-          <div>
-            <div class="bar"><div class="fill" style="width:50%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:50%"></span></div>
-            <div class="barlabels"><span>Light</span><span class="on">Standard</span><span>Strict</span></div>
-            <div class="barmeaning">Full scaffold, systems + approach graded; done-when required.</div>
-          </div>
-        </div>
-        <div class="gatebar">
-          <span class="gname">Design</span>
-          <div>
-            <div class="bar"><div class="fill" style="width:100%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:100%"></span></div>
-            <div class="barlabels"><span>Light</span><span>Standard</span><span class="on">Strict</span></div>
-            <div class="barmeaning"><span class="custom">✓ custom</span>: tradeoffs need numbers; failure modes red-teamed in the gap map.</div>
-          </div>
-        </div>
-        <div class="gatebar">
-          <span class="gname">Review</span>
-          <div>
-            <div class="bar"><div class="fill" style="width:50%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:50%"></span><span class="floorstop" style="left:2px" title="floor: never below Light while declared"></span></div>
-            <div class="barlabels"><span>Light ⌊floor⌋</span><span class="on">Standard</span><span>Strict</span></div>
-            <div class="barmeaning">Findings vs. the withheld reference review + test gaps. <span class="floor">Floor: can’t drop below Light while a declare is live.</span> Strict adds: write one missing test.</div>
-          </div>
-        </div>
-        <div class="gatebar">
-          <span class="gname">Debug</span>
-          <div>
-            <div class="bar queued"><div class="fill" style="width:50%"></div><span class="notch" style="left:50%"></span><span class="handle" style="left:50%"></span></div>
-            <div class="barlabels"><span>Light</span><span class="on">Standard</span><span>Strict</span></div>
-            <div class="barmeaning"><span class="queue">Strict → Standard applies Thu 11:02</span>: easing takes 48h; hardening is instant.</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <img class="realshot" src="shots/12-settings.jpg" alt="The real Settings: setup card and one difficulty bar per gate">
   </section>
   <div class="rail" aria-hidden="true"><i></i></div>
 
