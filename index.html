@@ -266,8 +266,8 @@
 <div class="wrap">
   <header class="hero">
     <div class="brand"><img src="lasso-logo.svg" alt="" width="34" height="34" style="display:block"><span class="wordmark">Lasso</span></div>
-    <h1>You can’t ship<br><span style="color:#7E9B77">what you can’t explain.</span></h1>
-    <p>Build with AI as fast as you want. Lasso adds gates that make you prove you understand the work before it moves forward. The gates can't be skipped.</p>
+    <h1>AI writes the code.<br><span style="color:#7E9B77">You still have to understand it.</span></h1>
+    <p>Lasso adds required checkpoints to your build process. At each one, you explain what you're building in your own words. Everything stays locked until you get it right. And if you're missing something, Lasso teaches it to you, then you try again.</p>
 
     <div class="herodemo" id="demo" data-step="0" aria-label="Demo: a prompt is held until you explain your understanding">
       <div class="termcard hd-term"><span class="p">~/app $</span> claude<br><span class="hd-prompt">&gt; wire up the payment webhook</span><br><span class="p hd-held">⏸ Lasso: gate open, prompt held until you pass</span></div>
@@ -288,15 +288,15 @@
         </div>
       </div>
       <div class="hd-step" aria-hidden="true">
-        <span class="hd-s0">1 · You hand work to the agent…</span>
-        <span class="hd-s2">2 · Lasso holds it, gate open.</span>
-        <span class="hd-s3">3 · You explain it. Closed book.</span>
-        <span class="hd-s4">4 · It marks exactly what's missing.</span>
-        <span class="hd-s5">5 · Get it right, and the work flows.</span>
+        <span class="hd-s0">1 · You ask Claude to build something</span>
+        <span class="hd-s2">2 · Lasso holds the prompt and opens a gate</span>
+        <span class="hd-s3">3 · You explain the work, from memory</span>
+        <span class="hd-s4">4 · Lasso marks what you're missing</span>
+        <span class="hd-s5">5 · Get it right and the prompt goes through</span>
       </div>
     </div>
 
-    <p style="margin-top:20px"><b style="color:var(--ink)">Nothing ships until you can explain it.</b> Every gate you pass is a skill you keep.</p>
+    <p style="margin-top:20px"><b style="color:var(--ink)">You still build fast.</b> You just can't skip the understanding.</p>
     <div class="rhythm" aria-label="A session: the gate appears for minutes, disappears for hours, returns at the next moment work moves">
       <span class="r-node r-start">› new task</span>
       <span class="r-flow"></span>
@@ -306,14 +306,14 @@
       <span class="r-flow"></span>
       <span class="r-node r-merge">✓ merged</span>
     </div>
-    <p class="rhythm-cap">Minutes at the gate. Hours in flow. <span style="color:var(--sienna)">Skip one → −$25.</span></p>
+    <p class="rhythm-cap">A gate takes a few minutes. The rest is normal work. <span style="color:var(--sienna)">Skipping one costs $25.</span></p>
   </header>
 
   <div style="margin-top:72px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)">One task, start to finish</div>
   <!-- 1 · TODAY -->
   <section class="stage" id="s1" style="margin-top:14px">
-    <div class="stage-head"><span class="n">1</span><h2>Your whole day, one screen</h2></div>
-    <p class="note">Your tasks, your deadlines, what's waiting on you.</p>
+    <div class="stage-head"><span class="n">1</span><h2>Your tasks live in Lasso</h2></div>
+    <p class="note">A simple list of what you're building, with a deadline and where each task stands.</p>
     <div class="frame">
       <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso · Today</span></div>
       <div class="screen">
@@ -338,14 +338,14 @@
   </section>
   <section class="stage" id="how">
     <div class="stage-head"><span class="n">→</span><h2>How it fits your day</h2></div>
-    <p class="note" style="max-width:68ch"><b>1.</b> Work as usual: Claude, your editor, your repos. <b>2.</b> When work moves (a prompt, a PR, a merge), a 2-minute gate asks you to explain it from memory. There is no way around it. <b>3.</b> Miss something? ✓/✗ shows exactly what, a short lesson fills the gap, retry when ready. Nothing merges until you can explain it.</p>
+    <p class="note" style="max-width:68ch">You work the way you always do: Claude, your editor, GitHub. When work is about to move forward, like sending a prompt, opening a PR, or merging, Lasso stops and asks you to explain it. If you can, you keep moving. If you can't, it shows you exactly what you missed, teaches it, and you try again. There is no way around a gate.</p>
   </section>
   <div class="rail" aria-hidden="true"><i></i></div>
 
   <!-- 2 · TAKEOVER -->
   <section class="stage" id="s2">
-    <div class="stage-head"><span class="n">2</span><h2>The gate takes your screen</h2></div>
-    <p class="note">Start a new task and the gate appears. Only when work moves, never in between.</p>
+    <div class="stage-head"><span class="n">2</span><h2>A gate takes over your screen</h2></div>
+    <p class="note">It only appears when work is about to move. The rest of the time you never see it.</p>
     <div class="frame">
       <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Your screen, 2:03 pm</span></div>
       <div class="desk">
@@ -360,10 +360,10 @@
           </div>
         </div>
         <div class="rulechips">
-          <span class="rulechip"><b>Can’t close it</b>: no ✕, always on top</span><!-- takeover-anchor -->
-          <span class="rulechip"><b>Can’t switch away</b>: the window pulls focus right back</span>
-          <span class="rulechip warn"><b>3+ seconds away = fee</b>: and mid-answer, your attempt clears</span>
-          <span class="rulechip"><b>Always an exit</b>: abandon door, with its cost shown</span>
+          <span class="rulechip"><b>No close button</b>: it stays on top</span><!-- takeover-anchor -->
+          <span class="rulechip"><b>No switching away</b>: it pulls focus right back</span>
+          <span class="rulechip warn"><b>Look away too long</b>: small fee, and your attempt resets</span>
+          <span class="rulechip"><b>Always an exit</b>: you can abandon, it just costs money</span>
         </div>
       </div>
     </div>
@@ -372,8 +372,8 @@
 
   <!-- 3 · WRITE -->
   <section class="stage" id="s3">
-    <div class="stage-head"><span class="n">3</span><h2>Closed book.</h2></div>
-    <p class="note"><b>Closed book</b>: no notes, no code, no paste. Explaining it cold is the proof.</p>
+    <div class="stage-head"><span class="n">3</span><h2>You explain it from memory</h2></div>
+    <p class="note">No notes, no code, no pasting. If you really understand something, you can say it in your own words.</p>
     <div class="frame">
       <div class="titlebar lock">
         <span class="tname">Task gate · lasso</span>
@@ -413,8 +413,8 @@
 
   <!-- 4 · GAP MAP -->
   <section class="stage" id="s4">
-    <div class="stage-head"><span class="n">4</span><h2>See exactly what you’re missing</h2></div>
-    <p class="note">Miss something and you see exactly what: ✓ what you got, ✗ what you didn't, one pushback each. The study room teaches it, with no timer and no answers handed over. Your tools stay open the whole time; only the merge stays locked.</p>
+    <div class="stage-head"><span class="n">4</span><h2>It shows you what you missed, then teaches it</h2></div>
+    <p class="note">A check for what you got right, an X for what you missed. Then Lasso fills in the gap: a short lesson, no time limit. Your tools stay open the whole time. Only moving forward stays locked, until you can answer again and pass.</p>
     <div class="frame">
       <div class="titlebar lock"><span class="tname">Task gate · attempt 1, close, not yet</span><div class="tright"><span class="est">rewrite from scratch to continue</span></div></div>
       <div class="screen">
@@ -452,8 +452,8 @@
 
   <!-- 6 · PASS + DEBRIEF -->
   <section class="stage" id="s6">
-    <div class="stage-head"><span class="n">5</span><h2>Pass, then build</h2></div>
-    <p class="note">Your answer next to an expert's. Then the work releases.</p>
+    <div class="stage-head"><span class="n">5</span><h2>Pass, and the work unlocks</h2></div>
+    <p class="note">You see your answer next to what an expert would say. Then your prompt goes through and you keep building.</p>
     <div class="frame">
       <div class="titlebar lock"><span class="tname">Task gate · attempt 2</span></div>
       <div class="passbar">✓ Passed, prompt released, flow window open</div>
@@ -481,7 +481,7 @@
   <!-- 7 · REVIEW -->
   <section class="stage" id="s7">
     <div class="stage-head"><span class="n">6</span><h2>No merge until you understand the change</h2></div>
-    <p class="note">Review the PR in your own tools. The gate grades your comments against a hidden expert review of the <b>real diff</b>.</p>
+    <p class="note">Before a PR can merge, you review it yourself, in your own tools. Lasso checks your review against what's actually in the code.</p>
     <div class="frame">
       <div class="titlebar lock"><span class="tname">Review gate · PR #31, dedupe webhook deliveries</span><div class="tright"><span class="est">~7 min</span></div></div>
       <div class="screen">
@@ -507,8 +507,8 @@
 
   <!-- 9 · PER-GATE BARS -->
   <section class="stage" id="s9">
-    <div class="stage-head"><span class="n">7</span><h2>You set how hard it pushes</h2></div>
-    <p class="note">Set each gate's difficulty. Harder is instant; easier takes 48 hours.</p>
+    <div class="stage-head"><span class="n">7</span><h2>You choose how strict it is</h2></div>
+    <p class="note">Each gate has a difficulty you control. Making it harder applies right away. Making it easier takes 48 hours, so you can't loosen it in a weak moment.</p>
     <div class="frame">
       <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso · Settings · Gates</span><div class="tright"><span class="chip">global: Standard</span></div></div>
       <div class="screen white">
@@ -555,7 +555,7 @@
   <!-- 10 · THE RAILS -->
   <section class="stage" id="s10">
     <div class="stage-head"><span class="n">8</span><h2>Skipping your understanding isn’t an option</h2></div>
-    <p class="note">Finish honestly: free. Walk away or sneak past a gate: real money.</p>
+    <p class="note">Pass your gates and Lasso costs nothing. Sneak past one and it charges you real money.</p>
     <div class="frame">
       <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tname">Lasso · ledger</span></div>
       <div class="screen">
@@ -564,16 +564,16 @@
           <div class="count" style="color:var(--pine)">$0<div class="sub" style="font-family:var(--sans);font-weight:400">nothing charged</div></div>
         </div>
         <div class="declare" style="border-color:var(--sienna); margin-bottom:0">
-          <div><div class="task">Push to dev at 2:11 pm, no gate on record</div><div class="sub">integrity breach · the skipped gate fires before your next delegation</div></div>
+          <div><div class="task">Push to dev at 2:11 pm, no gate on record</div><div class="sub">pushed without passing the gate · it fires before your next prompt</div></div>
           <div class="count" style="color:var(--sienna)">−$25<div class="sub" style="font-family:var(--sans);font-weight:400">skipping charged</div></div>
         </div>
       </div>
     </div>
     <div class="foot">
-      <span><b>Fullscreen takeover</b>: unclosable, focus-recaptured, 3s away = fee</span>
-      <span><b>Forced retrieval</b>: leave mid-answer and the attempt clears</span>
-      <span><b>Fail-frozen-but-free</b>: outages never auto-pass, never charge</span>
-      <span><b>Five habits</b>: systems · task choice · design · review · debug</span>
+      <span><b>Fullscreen takeover</b>: no close button, pulls focus back</span>
+      <span><b>From memory</b>: leave mid-answer and the attempt resets</span>
+      <span><b>If Lasso goes down</b>: nothing auto-passes, nothing is charged</span>
+      <span><b>Five gates</b>: starting a task · design · building · review · debugging</span>
     </div>
   </section>
   <div style="margin:150px 0 40px;text-align:center">
