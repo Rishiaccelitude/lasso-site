@@ -1,27 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Lasso mark v3 — a thrown lasso: open loop, gold honda knot low-left,
-       live tail dragging right. Pine tile, paper rope, one gold accent. -->
+  <!-- Lasso mark v4 — Olive-light: airy sage tile, deep-forest rope, soft gold
+       honda. Same thrown-lasso geometry as v3, inverted to light. -->
   <defs>
     <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#17684E"/>
-      <stop offset="1" stop-color="#0D4A36"/>
+      <stop offset="0" stop-color="#F3F5EC"/>
+      <stop offset="1" stop-color="#E9EDDD"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="116" fill="url(#tile)"/>
-  <rect x="7" y="7" width="498" height="498" rx="110" fill="none" stroke="#FFFFFF" stroke-opacity=".07" stroke-width="6"/>
+  <rect width="512" height="512" rx="128" fill="url(#tile)"/>
+  <rect x="6" y="6" width="500" height="500" rx="122" fill="none" stroke="#1E4433" stroke-opacity=".08" stroke-width="4"/>
   <g fill="none" stroke-linecap="round">
-    <!-- the loop, tilted like a throw -->
     <g transform="rotate(12 250 208)">
-      <ellipse cx="250" cy="208" rx="148" ry="122" stroke="#F4EFE2" stroke-width="35"/>
+      <ellipse cx="250" cy="208" rx="146" ry="120" stroke="#1E4433" stroke-width="34"/>
     </g>
-    <!-- the tail: hangs from the knot, swings right in a live S -->
     <path d="M 148 316 C 120 376 196 416 272 402 C 348 388 386 414 394 452"
-          stroke="#F4EFE2" stroke-width="35"/>
-    <!-- depth: the tail passes under the loop's lower arc -->
-    <path d="M 148 316 C 130 352 146 378 176 392" stroke="#0D4A36" stroke-width="47" stroke-opacity=".55"/>
-    <path d="M 148 316 C 120 376 196 416 272 402" stroke="#F4EFE2" stroke-width="35"/>
+          stroke="#1E4433" stroke-width="34"/>
+    <path d="M 150 322 C 138 348 148 368 170 381" stroke="#F3F5EC" stroke-width="44"/>
+    <path d="M 148 316 C 120 376 196 416 272 402" stroke="#1E4433" stroke-width="34"/>
   </g>
-  <!-- the honda knot: gold cinch where loop meets tail -->
-  <circle cx="148" cy="316" r="44" fill="#D9B64A"/>
-  <circle cx="148" cy="316" r="17" fill="#0D4A36"/>
+  <circle cx="148" cy="316" r="43" fill="#C8A94E"/>
+  <circle cx="148" cy="316" r="16" fill="#F3F5EC"/>
 </svg>
