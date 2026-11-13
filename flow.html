@@ -120,13 +120,14 @@
     <div class="loop">
       <div class="lstep"><span class="n">1</span><div class="t">Gate fires at a seam</div><div class="d">Delegate, open a PR, hit a bug, finish a batch. Sized from your real work, with the rationale shown.</div></div>
       <div class="lstep closed"><span class="n">2</span><div class="t">Blank attempt</div><div class="d">Closed book. The scaffold and your memory — paste off, nothing else on screen.</div></div>
-      <div class="lstep"><span class="n">3</span><div class="t">Check understanding</div><div class="d">The examiner grades your explanation against the real work. Pass → released.</div></div>
+      <div class="lstep"><span class="n">3</span><div class="t">Check understanding</div><div class="d">The examiner grades your explanation against the real work.</div></div>
+      <div class="lstep"><span class="n">3b</span><div class="t">Interviewer pushes back</div><div class="d">A base pass isn't a pass yet: one live follow-up at your weakest point — "what if 10×?" Defend it in a few sentences.</div></div>
       <div class="lstep studyk"><span class="n">4</span><div class="t">Study room, untimed</div><div class="d">Your gaps + what you need to know + the lesson + a tutor. Stay as long as you want.</div></div>
       <div class="lstep work"><span class="n">5</span><div class="t">Back to work</div><div class="d">Return to Claude: ask, read code, use every tool. A standing reminder says what's still locked.</div></div>
       <div class="lstep"><span class="n">6</span><div class="t">Retry when ready</div><div class="d">Resume from Today. Fresh questions, blank page. Loop until it's yours.</div></div>
       <div class="lstep pass"><span class="n">7</span><div class="t">Pass</div><div class="d">Debrief, then the seam opens: prompt released, check flips, chain advances.</div></div>
     </div>
-    <p class="loopnote">4 → 5 → 6 cycles freely. 2 is the only closed door, and 7 is the only way past the seam.</p>
+    <p class="loopnote">4 → 5 → 6 cycles freely. 2 and 3b are the closed-book moments, and 7 is the only way past the seam.</p>
 
     <div class="locks">
       <div class="lock open"><h4>Always open — even mid-gate</h4><ul>
@@ -153,7 +154,7 @@
       <div class="lstep"><span class="n">1</span><div class="t">Prompt held</div><div class="d">"add a sliding-window option to the limiter" — held in every terminal, same gate.</div></div>
       <div class="lstep closed"><span class="n">2</span><div class="t">Blank attempt, failed honestly</div><div class="d">A hand-wavy answer got four pointers: "open src/limiter.mjs and name the exported symbols" — never the answer.</div></div>
       <div class="lstep work"><span class="n">3</span><div class="t">Back to work</div><div class="d">Built the sliding window with tests; one test's premise was wrong and got debugged for real.</div></div>
-      <div class="lstep"><span class="n">4</span><div class="t">Retry → pass</div><div class="d">The earned answer — data model, O(limit) tradeoff vs sliding counters, checkable done — passed the real examiner.</div></div>
+      <div class="lstep"><span class="n">4</span><div class="t">Retry → pass</div><div class="d">The earned answer passed the base bar, then the examiner pushed back live — defend the tradeoff — before the pass.</div></div>
       <div class="lstep"><span class="n">5</span><div class="t">PR → review gate</div><div class="d">The poller minted a gate from the live PR. First review missed one: "a real high-severity issue hides within a few lines of line 9."</div></div>
       <div class="lstep studyk"><span class="n">6</span><div class="t">Went back, found it</div><div class="d">Re-read the hunk: the hits map never evicts idle keys — unbounded memory under attacker-controlled keys.</div></div>
       <div class="lstep pass"><span class="n">7</span><div class="t">Findings → real PR comments → merged</div><div class="d">Three findings posted as an actual GitHub review; pre-push rail allowed; squash-merged.</div></div>
@@ -183,6 +184,21 @@
           <div class="ffoot"><span class="ab">Abandon — fee, work stays frozen</span><span class="bq">Not sure — study first</span><span class="bp">Check understanding</span></div>
         </div>
         <div class="ann"><span class="step-tag">THE ATTEMPT</span><br><b>Blank page, two doors.</b> The examiner sized the gate from your actual prompt and repo — the rationale is always visible, and one tap resizes it. The scaffold is the interview structure itself. Going straight to <b>Check</b> records confidence; <b>Not sure</b> records honesty and opens the study room with nothing spent.</div>
+      </div>
+
+      <div class="framerow">
+        <div class="frame">
+          <div class="fhead"><span class="nm"><span class="knot"></span>Context gate · optinet</span><span class="dots"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+          <div class="fbody">
+            <div style="border:1px solid var(--pine);border-left-width:4px;border-radius:11px;padding:11px 15px;box-shadow:0 2px 10px -4px rgba(17,94,69,.25)">
+              <div style="font:600 10px Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--pine);margin-bottom:5px">Interviewer pushes back</div>
+              <p style="margin:0 0 9px;font-weight:600;font-size:13px;line-height:1.5">Your keyset cursor assumes created_at is commit-ordered — but it's stamped at statement time and becomes visible at commit. What stops a late-committing row from being silently skipped, which is the exact bug you're here to fix?</p>
+              <div class="answerbox" style="min-height:34px">Answer like you would out loud — a few sentences. Paste is off.</div>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:9px"><span class="bp">Answer</span><span style="font-size:10.5px;color:var(--muted)">Your base answer passed — defend it and the gate opens.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="ann"><span class="step-tag">THE INTERVIEWER ROUND</span><br><b>A base pass isn't a pass.</b> Real interviews are a dialogue — so after your explanation clears the bar, the examiner pushes back ONCE at the weakest or most load-bearing point, live. A genuine defense (mechanism or tradeoff, 2–4 spoken sentences) completes the attempt; deflecting or restating sends you to the study room with one hint-shaped gap. This question was asked by the real examiner during a live run.</div>
       </div>
 
       <div class="framerow">
