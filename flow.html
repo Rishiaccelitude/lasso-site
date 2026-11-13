@@ -1,378 +1,111 @@
-<title>The Lasso Gate Atlas</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lasso, every screen</title>
+<link rel="icon" type="image/svg+xml" href="lasso-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
 <style>
-  /* Flowroom is deliberately a light world — single theme, painted explicitly. */
   :root {
-    --paper:#F2F4EB; --card:#FFFFFF; --ink:#24382B; --body:#3D5244; --muted:#6E7F6C; --faint:#90A08E;
-    --line:#DCE2D0; --pine:#115E45; --pine-wash:rgba(17,94,69,.08);
-    --sienna:#A64B1A; --sienna-wash:rgba(166,75,26,.06);
-    --gold:#9A7B1F; --gold-wash:rgba(154,123,31,.08);
-    --mono:"JetBrains Mono",ui-monospace,monospace; --sans:"Hanken Grotesk",-apple-system,system-ui,sans-serif; --serif:Fraunces,Georgia,serif;
+    color-scheme: light;
+    --paper: #F2F4EB; --card: #FFFFFF; --ink: #24382B; --body: #3D5244; --muted: #6E7F6C; --faint: #90A08E;
+    --hairline: #DCE2D0; --pine: #115E45;
+    --sans: "Hanken Grotesk", -apple-system, system-ui, sans-serif;
+    --serif: Fraunces, Georgia, serif;
   }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--paper); color:var(--ink); font:15.5px/1.6 var(--sans); }
-  .wrap { max-width:960px; margin:0 auto; padding:56px 24px 120px; }
-  h1 { font:500 clamp(36px,5vw,52px)/1.1 var(--serif); letter-spacing:-.015em; margin:0 0 10px; text-wrap:balance; }
-  .sub { color:var(--body); max-width:62ch; font-size:16.5px; margin:0 0 8px; }
-  .kicker { font:600 12px var(--sans); letter-spacing:.09em; text-transform:uppercase; color:var(--pine); margin-bottom:14px; }
-  h2 { font:600 24px/1.25 var(--serif); margin:0 0 6px; letter-spacing:-.01em; }
-  h3 { font:600 15px var(--sans); margin:0 0 8px; }
-  section.gate { margin-top:72px; }
-  .seam { font:400 13px var(--mono); color:var(--muted); margin:0 0 4px; }
-  .seam b { color:var(--sienna); font-weight:600; }
-  .teaches { background:var(--card); border:1px solid var(--line); border-left:3px solid var(--pine); border-radius:10px; padding:12px 16px; margin:14px 0 20px; font-size:14px; color:var(--body); }
-  .teaches b { color:var(--pine); }
-
-  /* ---------- the universal loop ---------- */
-  .loop { display:flex; flex-wrap:wrap; gap:8px 6px; align-items:stretch; margin:26px 0 8px; }
-  .lstep { flex:1 1 128px; min-width:128px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px 12px; position:relative; }
-  .lstep .n { font:600 10.5px var(--mono); color:var(--faint); }
-  .lstep .t { font-weight:600; font-size:13.5px; margin:2px 0 3px; }
-  .lstep .d { font-size:12px; color:var(--muted); line-height:1.45; }
-  .lstep.closed { border-color:var(--sienna); }
-  .lstep.closed .t { color:var(--sienna); }
-  .lstep.studyk { border-color:var(--gold); background:var(--gold-wash); }
-  .lstep.work { border-color:var(--pine); background:var(--pine-wash); }
-  .lstep.pass { background:var(--pine); border-color:var(--pine); }
-  .lstep.pass .t, .lstep.pass .d, .lstep.pass .n { color:#fff; }
-  .loopnote { font-size:13px; color:var(--muted); margin:10px 0 0; }
-  .locks { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:22px 0 0; }
-  .lock { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px; font-size:13.5px; }
-  .lock h4 { margin:0 0 8px; font-size:12px; letter-spacing:.07em; text-transform:uppercase; }
-  .lock.open h4 { color:var(--pine); } .lock.shut h4 { color:var(--sienna); }
-  .lock ul { margin:0; padding-left:18px; } .lock li { margin:3px 0; color:var(--body); }
-  @media (max-width:640px){ .locks { grid-template-columns:1fr; } }
-
-  /* ---------- UI frames ---------- */
-  .frames { display:flex; flex-direction:column; gap:26px; margin-top:22px; }
-  .framerow { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(200px,1fr); gap:20px; align-items:start; }
-  @media (max-width:760px){ .framerow { grid-template-columns:1fr; } }
-  .ann { font-size:13.5px; color:var(--body); }
-  .ann b { color:var(--ink); }
-  .ann .step-tag { display:inline-block; font:600 10.5px var(--mono); color:var(--gold); border:1px solid var(--gold); border-radius:9px; padding:1px 9px; margin-bottom:7px; }
-  .frame { background:var(--card); border:1px solid var(--line); border-radius:13px; overflow:hidden; box-shadow:0 10px 28px -14px rgba(35,40,25,.22); font-size:12.5px; }
-  .fhead { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 14px; border-bottom:1px solid var(--line); background:var(--card); }
-  .fhead .nm { font-weight:600; font-size:12px; display:flex; align-items:center; gap:7px; }
-  .knot { width:15px; height:15px; border:1.7px solid var(--pine); border-radius:50%; position:relative; flex:none; }
-  .knot::after { content:""; position:absolute; inset:3px; border:1.7px solid var(--pine); border-radius:50% 50% 50% 0; transform:rotate(-45deg); }
-  .dots { display:flex; gap:4px; } .dots i { width:16px; height:3.5px; border-radius:2px; background:var(--line); } .dots i.on { background:var(--pine); }
-  .fbody { padding:13px 16px 15px; }
-  .sizing { font-size:11.5px; color:var(--muted); display:flex; gap:8px; align-items:flex-start; }
-  .sizing .szb { flex:none; display:flex; gap:5px; }
-  .pillb { border:1px solid var(--line); background:var(--card); border-radius:9px; padding:3px 9px; font-size:10.5px; color:var(--ink); white-space:nowrap; }
-  .scaffold { margin:11px 0 9px; }
-  .scaffold .q { font-weight:600; font-size:13px; margin:6px 0 1px; }
-  .answerbox { border:1px solid var(--line); border-radius:10px; min-height:52px; padding:9px 12px; color:var(--faint); margin-top:9px; }
-  .ffoot { display:flex; align-items:center; gap:8px; padding:10px 14px; border-top:1px solid var(--line); }
-  .ffoot .ab { font-size:11px; color:var(--muted); margin-right:auto; }
-  .bq { border:1px solid var(--gold); background:var(--gold-wash); color:var(--gold); border-radius:9px; padding:6px 12px; font-weight:600; font-size:11.5px; }
-  .bp { background:var(--pine); border:1px solid var(--pine); color:#fff; border-radius:9px; padding:6px 13px; font-weight:600; font-size:11.5px; }
-  .bn { background:var(--card); border:1px solid var(--line); color:var(--ink); border-radius:9px; padding:6px 12px; font-weight:600; font-size:11.5px; }
-  .gapline { border:1px solid var(--line); border-left:3px solid var(--gold); border-radius:9px; padding:8px 11px; margin:6px 0; }
-  .gapline.wrong { border-left-color:var(--sienna); }
-  .gapline .push { display:block; color:var(--muted); font-size:11.5px; margin-top:2px; }
-  .gapline .sect { display:block; color:var(--faint); font-size:10px; margin-top:3px; }
-  .sumbox { border:1px solid var(--gold); background:var(--gold-wash); border-radius:10px; padding:9px 14px; margin:9px 0; }
-  .sumbox h5 { margin:0 0 4px; font-size:11px; color:var(--gold); }
-  .sumbox ul { margin:0; padding-left:16px; } .sumbox li { margin:2px 0; font-size:12px; }
-  .lsec h5 { margin:9px 0 2px; font-size:12.5px; }
-  .lsec p { margin:0; color:var(--body); font-size:12px; }
-  .flow { display:flex; flex-direction:column; gap:3px; margin:7px 0 2px; align-items:flex-start; }
-  .flow span { font:10.5px var(--mono); background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:3px 9px; }
-  .flow i { color:var(--gold); font-style:normal; font-size:10px; margin-left:14px; }
-  .tutor { display:flex; gap:6px; margin-top:10px; }
-  .tutor input { flex:1; border:1px solid var(--line); border-radius:8px; padding:6px 10px; font:inherit; font-size:11.5px; color:var(--faint); background:var(--paper); }
-  .tutor .ask { border:1px solid var(--gold); color:var(--gold); background:var(--gold-wash); border-radius:8px; padding:6px 12px; font-weight:600; font-size:11px; }
-  .doors { display:flex; gap:8px; align-items:center; border-top:1px solid var(--line); margin-top:11px; padding-top:10px; }
-  .doors .hint { font-size:10.5px; color:var(--muted); }
-  .term { background:#2B2F26; color:#C9CEC2; border-radius:10px; padding:11px 14px; font:11.5px/1.65 var(--mono); }
-  .term .p { color:#8FA08A; } .term .warn { color:#D9C27A; }
-  .diffl { font:11px var(--mono); padding:2px 9px; border-left:3px solid transparent; white-space:pre-wrap; }
-  .diffl.add { background:rgba(17,94,69,.07); } .diffl.flag { border-left-color:var(--sienna); background:var(--sienna-wash); }
-  .note { display:inline-block; font-size:10px; background:var(--sienna-wash); color:var(--sienna); border-radius:7px; padding:1px 7px; margin:2px 0 2px 9px; }
-  .board label { display:block; font-size:11px; font-weight:600; margin:7px 0 2px; }
-  .board .bx { border:1px solid var(--line); border-radius:8px; min-height:26px; padding:5px 9px; color:var(--faint); font-size:11px; }
-  .todayrow { display:flex; align-items:center; gap:10px; border:1px solid var(--pine); background:var(--pine-wash); border-radius:10px; padding:8px 13px; font-size:12px; }
-  .todayrow.gold { border-color:var(--gold); background:var(--gold-wash); }
-  .todayrow .go { margin-left:auto; background:var(--pine); color:#fff; border-radius:8px; padding:4px 13px; font-weight:600; font-size:11px; }
-  .todayrow.gold .go { background:var(--gold); }
-  .passband { background:#E7EEE4; border-top:1px solid var(--line); padding:11px 16px; }
-  .passband b { color:var(--pine); }
-  .debrief { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
-  .debrief h6 { margin:0 0 3px; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); }
-  .debrief p, .debrief li { font-size:11.5px; color:var(--body); margin:0; }
-  .debrief ul { margin:0; padding-left:15px; }
-    .screen { width:100%; display:block; border:1px solid var(--line); border-radius:14px; box-shadow:0 14px 36px -16px rgba(35,40,25,.3); margin:14px 0 6px; }
-  .stepno { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--pine); color:#fff; font:600 13px var(--mono); margin-right:9px; vertical-align:-6px; }
-  .shotcap { font-size:13px; color:var(--muted); margin:0 0 4px; }
-  .walk h3 { font:600 19px/1.3 var(--serif); margin:40px 0 4px; }
-  .rail { height:1px; background:var(--line); margin:60px 0 0; }
-  .atl-note { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-top:30px; font-size:14px; color:var(--body); }
-  .atl-note b { color:var(--ink); }
-  code { font:0.92em var(--mono); background:var(--card); border:1px solid var(--line); border-radius:5px; padding:0 4px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--sans); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 64px 24px 96px; }
+  header { text-align: center; margin-bottom: 56px; }
+  .brand { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .wordmark { font: 800 20px var(--serif); color: var(--pine); }
+  h1 { font: 600 clamp(32px, 5vw, 46px)/1.1 var(--serif); letter-spacing: -0.015em; margin: 0 0 14px; }
+  header p { color: var(--body); max-width: 60ch; margin: 0 auto; }
+  .step { margin: 0 0 64px; }
+  .step h2 { font: 600 24px/1.2 var(--serif); margin: 0 0 6px; }
+  .step .n { color: var(--pine); font-weight: 700; margin-right: 8px; }
+  .step p { color: var(--muted); font-size: 15px; max-width: 72ch; margin: 0 0 16px; }
+  .screen { width: 100%; border: 1px solid var(--hairline); border-radius: 14px; box-shadow: 0 16px 44px -18px rgba(35,40,25,.25); display: block; }
+  .foot { margin-top: 40px; text-align: center; color: var(--faint); font-size: 13px; }
 </style>
-
+</head>
+<body>
 <div class="wrap">
-  <div class="kicker">Lasso · every gate, end to end</div>
-  <h1>The Lasso Gate Atlas</h1>
-  <p class="sub">One loop, six gates. Each gate fires at a seam where work moves, verifies that <em>you</em> hold the understanding, and teaches exactly what you were missing. Claude and your tools are never taken away — the only closed-book moment is the attempt itself.</p>
+  <header>
+    <div class="brand"><img src="lasso-logo.svg" alt="" width="32" height="32"><span class="wordmark">Lasso</span></div>
+    <h1>Every screen, in order</h1>
+    <p>These are real screenshots of the app being used, captured from one task running start to finish: a gate opens, a first answer falls short, the study room teaches the gap, the retry passes, and the work releases. Then the other gates and Settings.</p>
+  </header>
 
-  <!-- ===================== THE UNIVERSAL LOOP ===================== -->
-  <section>
-    <h2 style="margin-top:44px">The universal loop</h2>
-    <p class="sub" style="font-size:14.5px">Every gate runs this exact cycle. It repeats until you pass — and the step it guards cannot move until you do.</p>
-    <div class="loop">
-      <div class="lstep"><span class="n">1</span><div class="t">Gate fires at a seam</div><div class="d">Delegate, open a PR, hit a bug, finish a batch. Sized from your real work, with the rationale shown.</div></div>
-      <div class="lstep closed"><span class="n">2</span><div class="t">Blank attempt</div><div class="d">Closed book. The scaffold and your memory — paste off, nothing else on screen.</div></div>
-      <div class="lstep"><span class="n">3</span><div class="t">Check understanding</div><div class="d">Graded hard: an answer that would crumble under the obvious pushback is a gap, not a pass.</div></div>
-      <div class="lstep studyk"><span class="n">4</span><div class="t">Study room, untimed</div><div class="d">Your gaps + what you need to know + the lesson + a tutor. Stay as long as you want.</div></div>
-      <div class="lstep work"><span class="n">5</span><div class="t">Back to work</div><div class="d">Return to Claude: ask, read code, use every tool. A standing reminder says what's still locked.</div></div>
-      <div class="lstep"><span class="n">6</span><div class="t">Retry when ready</div><div class="d">Resume from Today. Fresh questions, blank page. Loop until it's yours.</div></div>
-      <div class="lstep pass"><span class="n">7</span><div class="t">Pass</div><div class="d">Debrief, then the seam opens: prompt released, check flips, chain advances.</div></div>
-    </div>
-    <p class="loopnote">4 → 5 → 6 cycles freely. 2 is the only closed-book moment, and 7 is the only way past the seam.</p>
-
-    <div class="locks">
-      <div class="lock open"><h4>Always open — even mid-gate</h4><ul>
-        <li>Claude, in any terminal — prompts flow with a reminder once you've attempted</li>
-        <li>Reading code, running tests, using every tool</li>
-        <li>The study room and tutor, with no clock</li>
-      </ul></div>
-      <div class="lock shut"><h4>Locked until you pass — in every terminal</h4><ul>
-        <li>The chain's next step (map → spec → build → review → merged)</li>
-        <li><code>git push</code> (pre-push rail) and merge (required check)</li>
-        <li>The held work's output and the flow window</li>
-      </ul></div>
-    </div>
-    <div class="atl-note"><b>No side doors.</b> The server is the single authority: a second terminal, a new session, or a reboot asks the same SQLite ledger and gets the same answer. First contact with an untried gate still holds (the closed-book moment must happen once); after that, prompts flow but every seam stays shut. Landing code without its gate is a breach — the skipped gate comes back deeper, before your next delegation.</div>
-  
+  <section class="step">
+    <h2><span class="n">1</span>Today</h2>
+    <p>Your tasks with deadlines and stakes. Each one shows where it is in the chain: map, spec, build, review, merged. A missed deadline is shown honestly.</p>
+    <img class="screen" src="shots/01-today.jpg" alt="Today screen with two declared tasks, one missed with forfeited stake, and the add-a-task composer">
   </section>
 
-  <!-- ===================== THE REAL SCREENS, IN ORDER ===================== -->
-  <section class="walk">
-    <h2 style="margin-top:72px">The real screens, in order</h2>
-    <p class="sub" style="font-size:14.5px">Captured from the running app on 2026-11-13 — a real gate on a payment-capture task, driven end to end. This is exactly what you see.</p>
-
-    <h3><span class="stepno">1</span>Today — your day at a glance</h3>
-    <p class="shotcap">Declares with live countdowns and money at risk (a missed one shows its forfeit honestly) and a Resume row per open study break. Everything rides real work — there is no practice surface.</p>
-    <img class="screen" src="shots/01-today.jpg" alt="Today screen: resume rows, missed declare, composer">
-
-    <h3><span class="stepno">2</span>The gate opens — a blank page and two doors</h3>
-    <p class="shotcap">The ask is a bulleted checklist, sized from the actual work with the rationale in plain sight. A stale repo map adds one extra bullet — the architecture from memory — because the map is part of context, not a separate gate. Paste is off; two doors.</p>
-    <img class="screen" src="shots/02-attempt.jpg" alt="Blank closed-book attempt with sizing rationale, scaffold, and the two-door footer">
-
-    <h3><span class="stepno">3</span>Your answer, checked — green ✓, red ✗</h3>
-    <p class="shotcap">Every scaffold point graded at a glance: green checks for what you covered, red ✗ with one short note and one pushback for what you didn't — pointers to go look, never the answer.</p>
-    <img class="screen" src="shots/03-checklist.jpg" alt="Coverage checklist: green checks for covered sections, red x rows with pushbacks">
-
-    <h3><span class="stepno">4</span>The same page teaches — concise, on target</h3>
-    <p class="shotcap">"What you need to know" is the irreducible 3–5 claims, then a lesson aimed only at what this work turns on: the concept's mechanism, the data model, the contract, the decision — with a flow picture where one helps.</p>
-    <img class="screen" src="shots/04-lesson.jpg" alt="What you need to know summary and lesson sections with a request flow diagram">
-
-    <h3><span class="stepno">5</span>No timer — leave when YOU are ready</h3>
-    <p class="shotcap">Stay as long as you need, ask the tutor (it teaches, never answers), or take the Back-to-work door: Claude and your tools stay fully open while the merge stays locked. "I can explain it now" starts a fresh blank attempt.</p>
-    <img class="screen" src="shots/05-doors.jpg" alt="Lesson judgment and spec sections, tutor, and the two doors out of the study room">
-
-
-    <h3><span class="stepno">6</span>Pass — and the debrief compounds it</h3>
-    <p class="shotcap">Your full answer beside what an expert covers — short bullets, revealed only after the attempt is spent; the seam opens and the work is released.</p>
-    <img class="screen" src="shots/07-passed.jpg" alt="Passed debrief: you said beside an expert covers">
-
-    <h3><span class="stepno">7</span>Review gate — the PR diff is the exam</h3>
-    <p class="shotcap">Review the PR in YOUR tools — GitHub, Claude, your editor — and post real comments. The gate pulls them, grades them against a withheld reference, and shows ✓/✗ coverage plus what's untested. A miss comes back as a neighborhood hint, never the finding.</p>
-    <img class="screen" src="shots/08-review.jpg" alt="Review gate with two flagged diff lines and a verification section">
-
-    <h3><span class="stepno">8</span>Debug gate — evidence over guessing</h3>
-    <p class="shotcap">Repo-specific questions and a hypothesis board: claims must be reachable from your evidence, rivals ruled out, and the fix plan must end in a regression test. Confident guessing fails even when right.</p>
-    <img class="screen" src="shots/09-debug.jpg" alt="Debug gate questions and hypothesis board partially filled">
-
-
-    <h3><span class="stepno">9</span>Explain-back — own what you delegated</h3>
-    <p class="shotcap">Two minutes after the agent finishes a batch: what was built, where it breaks first. The habit that keeps AI leverage compatible with real understanding.</p>
-    <img class="screen" src="shots/11-explainback.jpg" alt="Explain back gate with two scaffold questions">
-
-    <h3><span class="stepno">10</span>Settings</h3>
-    <p class="shotcap">Per-gate difficulty bars, and the lens map drawing itself from your real work.</p>
-    <img class="screen" src="shots/12-settings.jpg" alt="Settings: readiness panel and lens strengths with territories">
-
-
-
-  <!-- ===================== THE LOOP, RUN FOR REAL ===================== -->
-  <section class="gate">
-    <p class="seam">verified live → <b>a real repo, a real PR, real merged code</b> (lasso-dojo, 2026-11-12)</p>
-    <h2>The whole coding flow, run for real</h2>
-    <div class="teaches"><b>This is not a mock.</b> The loop below was driven end to end as a user on a real GitHub repo the same day this page was published — every step through the actual product.</div>
-    <div class="loop" style="margin-top:18px">
-      <div class="lstep"><span class="n">1</span><div class="t">Prompt held</div><div class="d">"add a sliding-window option to the limiter" — held in every terminal, same gate.</div></div>
-      <div class="lstep closed"><span class="n">2</span><div class="t">Blank attempt, failed honestly</div><div class="d">A hand-wavy answer got four pointers: "open src/limiter.mjs and name the exported symbols" — never the answer.</div></div>
-      <div class="lstep work"><span class="n">3</span><div class="t">Back to work</div><div class="d">Built the sliding window with tests; one test's premise was wrong and got debugged for real.</div></div>
-      <div class="lstep"><span class="n">4</span><div class="t">Retry → pass</div><div class="d">The earned answer — data model, tradeoff, checkable done — passed the hard bar.</div></div>
-      <div class="lstep"><span class="n">5</span><div class="t">PR → review gate</div><div class="d">The poller minted a gate from the live PR. First review missed one: "a real high-severity issue hides within a few lines of line 9."</div></div>
-      <div class="lstep studyk"><span class="n">6</span><div class="t">Went back, found it</div><div class="d">Re-read the hunk: the hits map never evicts idle keys — unbounded memory under attacker-controlled keys.</div></div>
-      <div class="lstep pass"><span class="n">7</span><div class="t">Findings → real PR comments → merged</div><div class="d">Three findings posted as an actual GitHub review; pre-push rail allowed; squash-merged.</div></div>
-    </div>
-    <div class="atl-note"><b>What that proves:</b> the understanding bar is enforced by the same seams your real work crosses — and the feedback made the reviewer find the bug, not read about it.</div>
-  </section>
-\n  <!-- ===================== GATE 1: CONTEXT ===================== -->
-  <section class="gate">
-    <p class="seam">fires when → <b>you delegate</b> (a prompt leaves for Claude)</p>
-    <h2>1 · Context gate</h2>
-    <div class="teaches"><b>Interview muscle:</b> requirements clarification. Restate the problem, name the systems and data flows, defend the approach against the one you rejected, define done. This is the opening five minutes of every system-design and behavioral-technical round.</div>
-
-    <div class="frames">
-      <div class="framerow">
-        <div class="frame">
-          <div class="fhead"><span class="nm"><span class="knot"></span>Context gate · optinet</span><span class="dots"><i class="on"></i><i></i><i></i><i></i></span></div>
-          <div class="fbody">
-            <div class="sizing"><span>Moving session state to Redis touches auth for every user and adds a dependency with its own expiry and failure semantics — this one goes deep. <b style="color:var(--ink)">(deep)</b></span><span class="szb"><span class="pillb">Go deeper</span><span class="pillb">This is smaller</span></span></div>
-            <div class="scaffold">
-              <div class="q">The problem, in your own words</div>
-              <div class="q">The systems involved, and how data moves between them</div>
-              <div class="q">Your approach, and why it beats the alternative you rejected</div>
-              <div class="q">Done means…</div>
-            </div>
-            <div class="answerbox">Write from memory. Paste is off.</div>
-          </div>
-          <div class="ffoot"><span class="ab">Abandon — fee, work stays frozen</span><span class="bq">Not sure — study first</span><span class="bp">Check understanding</span></div>
-        </div>
-        <div class="ann"><span class="step-tag">THE ATTEMPT</span><br><b>Blank page, two doors.</b> The examiner sized the gate from your actual prompt and repo — the rationale is always visible, and one tap resizes it. The scaffold is the interview structure itself. Going straight to <b>Check</b> records confidence; <b>Not sure</b> records honesty and opens the study room with nothing spent.</div>
-      </div>
-
-      <div class="framerow">
-        <div class="frame">
-          <div class="fhead"><span class="nm"><span class="knot"></span>Context gate · optinet</span><span class="dots"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
-          <div class="fbody">
-            <b style="color:var(--gold);font-size:12px">The study room — stay as long as you need</b>
-            <div style="margin-top:8px"><b style="font-size:11.5px;color:var(--sienna)">Where your answer fell short</b>
-              <div class="gapline">"Sessions move to Redis" never says what a session row IS.<span class="push">What fields live in it, who writes it, and what reads it after login?</span><span class="sect">The systems involved</span></div>
-              <div class="gapline wrong">You said reads continue if Redis is down — they can't; auth checks hit it on every request.<span class="push">What does a cache miss mean for a logged-in user mid-request?</span><span class="sect">Your approach</span></div>
-            </div>
-            <div class="sumbox"><h5>WHAT YOU NEED TO KNOW</h5><ul>
-              <li>A session is data with a shape and an owner, not a vibe — name its fields and TTL.</li>
-              <li>Redis down means auth down unless you define a fallback; "it caches" is not a design.</li>
-              <li>The migration's real risk is the cutover: two stores briefly both believe they're the truth.</li>
-            </ul></div>
-            <div class="lsec"><h5>The data model under "session"</h5><p>One row: user id, issued-at, expiry, device. The server owns writes; every authed request reads it. Move the row and you move the trust boundary with it.</p>
-              <div class="flow"><span>browser cookie → server — session id only</span><i>↓</i><span>server → Redis — GET session:id on every request</span><i>↓</i><span>Redis → server — hit: proceed · miss: re-auth, never guess</span></div>
-            </div>
-            <div class="tutor"><input value="Ask the tutor about this material. It teaches concepts, never answers."><span class="ask">Ask</span></div>
-            <div class="doors"><span class="bp">I can explain it now</span><span class="bn">Back to work — keep learning in Claude</span><span class="hint">Nothing advances until you pass.</span></div>
-          </div>
-        </div>
-        <div class="ann"><span class="step-tag">FEEDBACK + LEARNING, ONE PAGE</span><br><b>Your gaps lead, then the exact knowledge that closes them.</b> Gap cards quote your own sentences with one pushback each — always a question or a place to look, never the missing fact: you go back to the work and find it. The summary is the irreducible 3–5 claims. The lesson teaches only the axes this work turns on — concepts, data model, API contract, the decision — with a flow picture where one helps. No timer; the answer box is never on this screen, so there is nothing to copy into.</div>
-      </div>
-
-      <div class="framerow">
-        <div class="frame"><div class="fbody" style="padding:14px 16px">
-          <div class="term"><span class="p">rishi@mac optinet %</span> claude<br><span class="p">&gt;</span> walk me through how our auth middleware reads the session today<br><span class="warn">Lasso: a gate is still open on this repo — learn and work freely; push/merge/next step stay locked until you pass it. Resume from Today.</span><br>Sure — <code style="background:none;border:none;color:#C9CEC2">middleware/auth.ts</code> pulls the cookie, then…</div>
-          <div style="height:10px"></div>
-          <div class="todayrow"><span>Gate open on optinet — studying. Nothing merges until you pass.</span><span class="go">Resume</span></div>
-        </div></div>
-        <div class="ann"><span class="step-tag">BACK TO WORK</span><br><b>The gate is not a jail.</b> Ask Claude anything, in any terminal — the reminder travels with every prompt so no session ever "forgets." Today keeps one pine row pointing back into the gate. When you can say it in your own words, hit Resume → fresh questions, blank page.</div>
-      </div>
-
-      <div class="framerow">
-        <div class="frame">
-          <div class="passband"><b>Passed.</b> Your prompt is released — the flow window opens and the chain's spec step turns green.</div>
-          <div class="fbody"><div class="debrief">
-            <div><h6>You said</h6><p>"Session rows move to Redis with a 24h TTL; auth middleware reads by id; Redis down fails closed to re-auth…"</p></div>
-            <div><h6>An expert covers</h6><ul><li>The cutover plan: dual-write window, then flip reads</li><li>What invalidates a session besides expiry (logout, password change)</li><li>The latency budget that justified Redis at all</li></ul></div>
-          </div></div>
-        </div>
-        <div class="ann"><span class="step-tag">PASS + DEBRIEF</span><br><b>The learning compounds at the finish.</b> Your answer sits beside what an expert covers — revealed only after the attempt is spent, so it can never be copied into one. Gaps you closed get resurfaced at 1d / 3d / 7d until two clean hits retire them.</div>
-      </div>
-    </div>
+  <section class="step">
+    <h2><span class="n">2</span>The gate opens, you answer from memory</h2>
+    <p>You asked Claude to build keyset pagination. Lasso holds the prompt and opens this gate. The examiner sized it deep and wrote questions for this exact task. No notes, no code, paste is off.</p>
+    <img class="screen" src="shots/02-attempt.jpg" alt="Blank closed-book attempt: sizing rationale, question list, empty answer box, the two footer doors">
   </section>
 
-  <!-- ===================== GATE 3: DESIGN ===================== -->
-  <section class="gate">
-    <p class="seam">fires when → <b>the agent is about to build something new</b></p>
-    <h2>3 · Design gate</h2>
-    <div class="teaches"><b>Interview muscle:</b> the system-design round itself. Requirements, approach, the alternative and why it lost, failure modes, evolution path — with numbers. Product judgment is graded too: why this feature, why now, what's out of scope.</div>
-    <div class="frames"><div class="framerow">
-      <div class="frame">
-        <div class="fhead"><span class="nm"><span class="knot"></span>Design gate · optinet</span><span class="dots"><i class="on"></i><i></i><i></i><i></i></span></div>
-        <div class="fbody">
-          <div class="scaffold">
-            <div class="q">Why this feature, why now — and what's explicitly out of scope</div>
-            <div class="q">Requirements, then the design that meets them</div>
-            <div class="q">The alternative you rejected, and the tradeoff that decided it</div>
-            <div class="q">How it fails, and how it evolves — with numbers</div>
-          </div>
-          <div class="answerbox">Write from memory. Paste is off.</div>
-        </div>
-        <div class="ffoot"><span class="ab">Abandon — fee, work stays frozen</span><span class="bq">Not sure — study first</span><span class="bp">Check understanding</span></div>
-      </div>
-      <div class="ann"><span class="step-tag">WHAT'S DIFFERENT</span><br><b>The build is held, not your tools.</b> The agent's build waits at this seam while you produce the design thinking first. Study-room lessons here lean hardest on the <b>decision axis</b> — tradeoffs, costs, numbers — because that's what separates a design answer from a feature list. The gate runs at full depth when the work is irreversible or novel; small reversible work earns a small gate.</div>
-    </div></div>
+  <section class="step">
+    <h2><span class="n">3</span>Your answer, checked</h2>
+    <p>The first answer was thin. A check for what landed, an x for each miss, with one pointed pushback each. No answers are handed over.</p>
+    <img class="screen" src="shots/03-checklist.jpg" alt="Coverage checklist: one green check, four red x rows each with a short pushback question">
   </section>
 
-  <!-- ===================== GATE 4: REVIEW ===================== -->
-  <section class="gate">
-    <p class="seam">fires when → <b>a PR opens</b> — the merge check stays pending until you pass</p>
-    <h2>4 · Review gate</h2>
-    <div class="teaches"><b>Interview muscle:</b> reviewing another engineer's PR. Find the real issues in the real diff — boundaries, error handling, contracts — and name the missing tests. Your findings post as actual PR comments: the gate's output is real work.</div>
-    <div class="frames"><div class="framerow">
-      <div class="frame">
-        <div class="fhead"><span class="nm"><span class="knot"></span>Review gate · optinet · pr-214</span><span class="dots"><i class="on"></i><i></i><i></i><i></i></span></div>
-        <div class="fbody">
-          <div class="diffl">@@ -1,3 +1,8 @@ src/consumer.ts</div>
-          <div class="diffl add flag">+  for (let i = 0; i &lt;= batch.length; i++) {<span class="note">boundary &lt;= overruns batch — last index reads undefined</span></div>
-          <div class="diffl add">+    if (batch[i].kind == 'retry') enqueue(batch[i]);</div>
-          <div class="diffl add">+  }</div>
-          <div style="margin-top:9px;font-size:11px;font-weight:600">Verification — the tests that prove this change, and the edge cases left untested</div>
-          <div class="answerbox" style="min-height:30px">consume() needs a boundary test at exactly N items, an empty batch, and a poison item…</div>
-        </div>
-        <div class="ffoot"><span class="ab">Abandon — fee, work stays frozen</span><span class="bq">Not sure — study first</span><span class="bp">Check understanding</span></div>
-      </div>
-      <div class="ann"><span class="step-tag">WHAT'S DIFFERENT</span><br><b>The diff is the exam.</b> You flag lines with inline notes; the examiner holds a withheld reference review of the same real diff and grades the match. A miss comes back as a neighborhood — “a real issue hides within a few lines of line 4” — never the finding itself; you re-read the hunk and catch it yourself. The reference reveals only at pass, as the debrief. Planted catch-trials measure your sensitivity. Reading the code, running it, asking Claude about unfamiliar APIs — all allowed. What's locked is the <b>merge</b>: the required check flips only on your pass, and pre-push holds in every terminal.</div>
-    </div></div>
+  <section class="step">
+    <h2><span class="n">4</span>The study room teaches the gap</h2>
+    <p>Same page, no timer. A lesson written for this task and this codebase, naming the real files and the real tradeoffs.</p>
+    <img class="screen" src="shots/04-lesson.jpg" alt="Lesson sections explaining keyset pagination mechanics and how to trace the cursor through the codebase">
   </section>
 
-  <!-- ===================== GATE 5: DEBUG ===================== -->
-  <section class="gate">
-    <p class="seam">fires when → <b>fix-shaped work arrives</b> — a failing check, a bug prompt</p>
-    <h2>5 · Debug gate</h2>
-    <div class="teaches"><b>Interview muscle:</b> the debugging round — evidence over guessing. Hypotheses that can be falsified, observations that rule things out, a root cause distinct from the symptom, a fix plan that ends in a regression test.</div>
-    <div class="frames"><div class="framerow">
-      <div class="frame">
-        <div class="fhead"><span class="nm"><span class="knot"></span>Debug gate · optinet</span><span class="dots"><i class="on"></i><i></i><i></i><i></i></span></div>
-        <div class="fbody board">
-          <label>Hypotheses — at least two, with what would falsify each</label><div class="bx">1. Webhook redelivery double-fires the consumer — falsified if delivery ids differ…</div>
-          <label>Evidence — what you observed, what it ruled out</label><div class="bx">Same X-GitHub-Delivery id on both rows → rules out two real events</div>
-          <label>Root cause — distinct from the symptom</label><div class="bx"></div>
-          <label>Fix plan — steps plus a regression test</label><div class="bx"></div>
-        </div>
-        <div class="ffoot"><span class="ab">Abandon — fee, work stays frozen</span><span class="bq">Not sure — study first</span><span class="bp">Check understanding</span></div>
-      </div>
-      <div class="ann"><span class="step-tag">WHAT'S DIFFERENT</span><br><b>A hypothesis board, not an essay.</b> Debugging tools stay live — run the code, add logs, bisect, ask Claude what a stack frame means. The gate verifies the <i>method</i>: a root cause your evidence doesn't reach fails even if the guess is right, evidence must rule the rival hypotheses out, and a fail tells you what to check next — a log to add, a path to trace — never the conclusion. You can't claim a root cause your evidence doesn't support, and the study room's lessons lean on the failure lens (what happens when a dependency is slow, wrong, or gone). Fix-shaped work jumps straight here — no ceremony first.</div>
-    </div></div>
+  <section class="step">
+    <h2><span class="n">5</span>Two doors out</h2>
+    <p>Say "I can explain it now" to retry with fresh questions, or go back to work and keep learning in Claude. Your tools never lock. Moving forward does.</p>
+    <img class="screen" src="shots/05-doors.jpg" alt="Bottom of the study room: the held prompt, files in play, the tutor box, and the two exit doors">
   </section>
 
-  <!-- ===================== GATE 6: EXPLAIN-BACK ===================== -->
-  <section class="gate">
-    <p class="seam">fires when → <b>the agent finishes a batch</b> of work in your session</p>
-    <h2>6 · Explain-back gate</h2>
-    <div class="teaches"><b>Interview muscle:</b> owning delegated work. "Walk me through what you shipped" — if Claude wrote it and you can't explain it, you didn't ship it. Light depth, two minutes, superseded automatically if a PR (and its review gate) covers the same hunks.</div>
-    <div class="frames"><div class="framerow">
-      <div class="frame">
-        <div class="fhead"><span class="nm"><span class="knot"></span>Explain back · optinet</span><span class="dots"><i class="on"></i><i></i><i></i><i></i></span></div>
-        <div class="fbody">
-          <div class="scaffold">
-            <div class="q">What was built, in your own words</div>
-            <div class="q">The one decision in it you'd defend in review</div>
-          </div>
-          <div class="answerbox">Write from memory. Paste is off.</div>
-        </div>
-        <div class="ffoot"><span class="ab">Abandon — fee, work stays frozen</span><span class="bq">Not sure — study first</span><span class="bp">Check understanding</span></div>
-      </div>
-      <div class="ann"><span class="step-tag">WHAT'S DIFFERENT</span><br><b>The smallest gate, the biggest habit.</b> Seeded with the session's actual activity (files touched in the last hour). It's what makes "comfortable using AI tools" compatible with "actually understands the code" — every delegated batch ends with the work living in your head too.</div>
-    </div></div>
+  <section class="step">
+    <h2><span class="n">6</span>Pass, and the debrief</h2>
+    <p>The retry passed. Your answer sits next to what an expert answer also covers. Then the held prompt goes through.</p>
+    <img class="screen" src="shots/07-passed.jpg" alt="Passed debrief: your full answer beside five expert bullets">
   </section>
 
-  <!-- ===================== PRACTICE + MEASUREMENT ===================== -->
-  <div class="rail"></div>
-  
+  <section class="step">
+    <h2><span class="n">7</span>Review gate, before a PR merges</h2>
+    <p>Review the PR in your own tools and post comments there, or flag lines right here. Your review is graded against a hidden expert read of the real diff. Merging waits for the verdict.</p>
+    <img class="screen" src="shots/08-review.jpg" alt="Review gate: the real diff, a flag-line box, and the verification question about tests">
+  </section>
 
-  <div class="atl-note" style="margin-top:48px"><b>Why this prepares you for the live version.</b> Every surface is the interview's shape, run on your real work: the context scaffold is requirements clarification, the map outline is the new-codebase walkthrough, the design scaffold is the whiteboard round, flagged diffs are PR review, the hypothesis board is the debugging round, and unaided checks are the dress rehearsal — no help, no retry comfort, scored honestly. A month of loops is a month of reps in exactly the motions you'll perform live.</div>
+  <section class="step">
+    <h2><span class="n">8</span>Debug gate, before a fix merges</h2>
+    <p>Reconstruct the root cause from memory: the reproduction, two competing hypotheses, the evidence that kills one, and why the fix addresses the cause.</p>
+    <img class="screen" src="shots/09-debug.jpg" alt="Debug gate questions about a duplicate-row pagination bug">
+  </section>
+
+  <section class="step">
+    <h2><span class="n">9</span>Explain-back, after a build batch</h2>
+    <p>Claude finished a chunk of work. Two quick questions prove you know what just got built and where it breaks first.</p>
+    <img class="screen" src="shots/11-explainback.jpg" alt="Explain-back gate with two questions and an empty answer box">
+  </section>
+
+  <section class="step">
+    <h2><span class="n">10</span>Settings: how strict each gate is</h2>
+    <p>One bar per gate. Tightening applies instantly. Loosening takes 48 hours, so you cannot ease a gate in a weak moment.</p>
+    <img class="screen" src="shots/12-settings.jpg" alt="Settings: per-gate rubric cards with difficulty bars">
+  </section>
+
+  <section class="step">
+    <h2><span class="n">11</span>What your work has covered</h2>
+    <p>The questions you keep getting asked, and the canon: about twenty fundamentals a founding engineer is expected to hold, marked by whether your real work has touched them.</p>
+    <img class="screen" src="shots/13-canon.jpg" alt="Lens strengths and the canon ledger of fundamentals touched by real work">
+  </section>
+
+  <div class="foot">Lasso · no understanding, no delegation, no merge</div>
 </div>
+</body>
+</html>
